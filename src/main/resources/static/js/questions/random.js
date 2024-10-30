@@ -24,7 +24,12 @@ $(document).ready(function () {
 
     $('#viewResultsButton').click(function () {
         const url = '/questions/results';
-        window.open(url, 'myResult');
+        const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+
+/*        // 팝업 차단 방지를 위해 창이 제대로 열리지 않은 경우 처리
+        if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+            alert('팝업이 차단되었습니다. 팝업 차단 설정을 해제해 주세요.');
+        }*/
     });
 
     $('#retryButton').click(function () {
