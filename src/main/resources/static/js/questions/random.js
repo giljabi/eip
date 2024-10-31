@@ -33,9 +33,15 @@ $(document).ready(function () {
     });
 
     $('#retryButton').click(function () {
-        const subjectSelect = $('#subjectSelect').val();
-        const url = '/questions/random/' + subjectSelect;
-        window.location.href = url;
+        $('#retryOverlay').fadeIn();
+
+        setTimeout(function () {
+            $('#retryOverlay').fadeOut();
+            const subjectSelect = $('#subjectSelect').val();
+            const url = '/questions/random/' + subjectSelect;
+            window.location.href = url;
+        }, 1000);
+
     });
 
     $('#submitButton').click(function () {
