@@ -60,7 +60,7 @@
     <button type="submit" id="viewResultsButton" class="btn btn-primary mt-3 w-100">나의 결과보기</button>
     <!-- 추가된 select 박스 -->
     <div class="mt-3">
-        <select id="subjectSelect" class="form-select">
+        <select id="subjectSelect" class="form-select" onchange="selectSubject()">
             <option value="0">아무과목이나 막섞어</option>
             <option value="1">소프트웨어설계</option>
             <option value="2">소프트웨어개발</option>
@@ -69,7 +69,6 @@
             <option value="5">정보시스템구축관리</option>
         </select>
     </div>
-    <button type="submit" id="startButton" class="btn btn-primary mt-3 w-100">문제변경</button>
 
     <div th:each="question : ${questions}" class="card mt-3">
         <input type="hidden" name="question-id" id="question-id" th:value="${question.id}">
