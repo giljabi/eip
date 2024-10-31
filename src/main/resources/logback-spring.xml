@@ -10,10 +10,9 @@
     <springProfile name="local">
         <logger name="org.springframework.web" level="OFF"/>
         <logger name="org.springframework.security" level="INFO"/>
-        <logger name="com.zaxxer.hikari" level="WARN"/>
-        <logger name="org.hibernate.SQL" level="WARN"/>
-        <logger name="org.hibernate.type" level="INFO"/>
-        <logger name="org.hibernate" level="INFO"/>
+        <!-- sql로그: info-->
+        <logger name="p6spy" level="INFO"/>
+
         <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
             <encoder>
                 <pattern>${LOG_PATTERN_FILE}</pattern>
@@ -45,10 +44,9 @@
     <springProfile name="prod">
         <logger name="org.springframework.web" level="OFF"/>
         <logger name="org.springframework.security" level="INFO"/>
-        <logger name="com.zaxxer.hikari" level="INFO"/>
-        <logger name="org.hibernate.SQL" level="WARN"/>
-        <logger name="org.hibernate.type" level="INFO"/>
-        <logger name="org.hibernate" level="INFO"/>
+        <!-- sql로그: info-->
+        <logger name="p6spy" level="WARN"/>
+
         <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
             <encoder>
                 <pattern>${LOG_PATTERN_FILE}</pattern>
