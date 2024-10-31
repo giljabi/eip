@@ -69,6 +69,8 @@
             <option value="5">정보시스템구축관리</option>
         </select>
     </div>
+    <button type="submit" id="" class="btn btn-primary mt-3 w-100"></button>
+
 
     <div th:each="question : ${questions}" class="card mt-3">
         <input type="hidden" name="question-id" id="question-id" th:value="${question.id}">
