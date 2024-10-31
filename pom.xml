@@ -110,13 +110,6 @@
             <version>42.6.0</version>
         </dependency>
 
-        <!-- P6Spy (SQL 로깅) -->
-        <dependency>
-            <groupId>com.github.gavlyukovskiy</groupId>
-            <artifactId>p6spy-spring-boot-starter</artifactId>
-            <version>1.8.0</version>
-        </dependency>
-
         <!-- Log4jdbc-log4j2 (SQL 로깅과 Log4j2 통합) -->
         <dependency>
             <groupId>org.bgee.log4jdbc-log4j2</groupId>
