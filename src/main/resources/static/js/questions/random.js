@@ -6,6 +6,13 @@ function getCookie(name) {
     return null;
 }
 
+function selectSubject() {
+    const subjectSelect = $('#subjectSelect').val();
+    const url = '/questions/random/' + subjectSelect;
+    window.location.href = url;
+}
+
+
 $(document).ready(function () {
     $('#retryButton').hide();
     $('#submitButton').show();
@@ -15,12 +22,6 @@ $(document).ready(function () {
     // select 박스의 값 설정
     $('#subjectSelect').val(subjectId);
 
-
-    $('#startButton').click(function () {
-        const subjectSelect = $('#subjectSelect').val();
-        const url = '/questions/random/' + subjectSelect;
-        window.location.href = url;
-    });
 
     $('#viewResultsButton').click(function () {
         const url = '/questions/results';
