@@ -17,10 +17,10 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     // subjectId가 null일 때 사용할 쿼리
     //@Query(value = "SELECT * FROM (SELECT * FROM question WHERE id in(26, 30, 50) ORDER BY id) q ORDER BY RANDOM() LIMIT :limits", nativeQuery = true)
-    @Query(value = "SELECT * FROM (SELECT * FROM question ORDER BY id) q ORDER BY RANDOM() LIMIT :limits", nativeQuery = true)
+    @Query(value = "SELECT * FROM (SELECT * FROM question WHERE useflag=true ORDER BY id) q ORDER BY RANDOM() LIMIT :limits", nativeQuery = true)
     List<Question> findRandomQuestions(@Param("limits") int limits);
 
-    @Query(value = "SELECT * FROM (SELECT * FROM question WHERE subject_id = :subjectId ORDER BY id) q ORDER BY RANDOM() LIMIT :limits", nativeQuery = true)
+    @Query(value = "SELECT * FROM (SELECT * FROM question WHERE subject_id = :subjectId AND useflag=true ORDER BY id) q ORDER BY RANDOM() LIMIT :limits", nativeQuery = true)
     List<Question> findRandomQuestions(@Param("limits") int limits, Integer subjectId);
 
     @Query("SELECT new kr.giljabi.eip.dto.response.AnswerCorrectPercentageDto(q.correct, q.correctCount, q.replyCount) " +
