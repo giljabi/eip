@@ -76,7 +76,7 @@
         <input type="hidden" name="question-id" id="question-id" th:value="${question.id}">
 
         <div class="card-body">
-            <p th:text="${question.examNo.examDay} + ' | ' + ${question.subject.name} + ' | ' + ${question.examNo.name}"></p>
+            <p th:text="${question.subject.name} +'|'+ ${question.examNo.examDay} +'|출처:'+ ${question.examNo.name} "></p>
             <h5 class="card-title" th:text="${question.name}"></h5>
 
             <!-- 이미지가 있는 경우에만 출력 -->
