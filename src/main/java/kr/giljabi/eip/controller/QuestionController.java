@@ -52,8 +52,17 @@ public class QuestionController {
     }
 
     @GetMapping("/random/{subjectId}")
-    public String getRandomQuestions(@PathVariable Integer subjectId, Model model) {
-        List<Question> questions = questionService.getRandomQuestions(subjectId);
+    public String getRandomQuestions(@PathVariable Integer subjectId,
+                                     HttpServletRequest request,
+                                     Model model) {
+        //uuid cookie가 없으면 첫화면부터 시작하게 한다.
+        String uuid = CommonUtils.getCookieValue(request, CommonUtils.UUID_COOKIE_NAME);        // UUID 생성
+        if (uuid == null) {
+            model.addAttribute("results", null);
+            return "redirect:/";
+        }
+
+        List<Question> questions = questionService.getRandomQuestions(subjectId, uuid);
         model.addAttribute("questions", questions);
         return "questions/random";
     }
