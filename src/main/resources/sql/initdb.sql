@@ -119,7 +119,14 @@ create table results (
 	constraint fk_results_question_id foreign key (question_id) references question(id)	
 );
 create index idx_results_uuid on results(uuid);
+alter table results add column remoteip varchar(40);
 
-
+create table randomquestion(
+                               id serial primary key,
+                               createat timestamp default now(),
+                               uuid char(36),
+                               question_id int
+);
+create index idx_randomquestion_uuid on randomquestion(uuid)
 
 

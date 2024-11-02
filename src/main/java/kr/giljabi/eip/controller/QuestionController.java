@@ -110,7 +110,8 @@ public class QuestionController {
 
             // 결과 저장
             int correct = isCorrect ? 1 : 0;    // 숫자로 해야 나중에 합산이 편함
-            Results userResult = new Results(clientUUID, questionId, userAnswer, correct, request.getRemoteAddr());
+            Results userResult = new Results(clientUUID, questionId, userAnswer,
+                    correct, CommonUtils.getClientIp(request));
             resultService.save(userResult);
             System.out.println("userResult: " + userResult.toString());
         }
