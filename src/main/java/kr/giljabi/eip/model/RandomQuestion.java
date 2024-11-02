@@ -27,6 +27,8 @@ public class RandomQuestion {
     @Column(name = "question_id", nullable = false)
     private Long questionId;
 
+    private String remoteip;
+
     // Getters and Setters
     // 생성자, toString, hashCode, equals 메서드도 필요에 따라 추가하세요.
 }

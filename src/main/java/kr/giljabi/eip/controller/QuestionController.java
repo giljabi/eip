@@ -62,7 +62,8 @@ public class QuestionController {
             return "redirect:/";
         }
 
-        List<Question> questions = questionService.getRandomQuestions(subjectId, uuid);
+        List<Question> questions = questionService.getRandomQuestions(subjectId,
+                uuid, CommonUtils.getClientIp(request));
         model.addAttribute("questions", questions);
         return "questions/random";
     }

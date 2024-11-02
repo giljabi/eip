@@ -128,5 +128,6 @@ create table randomquestion(
                                question_id int
 );
 create index idx_randomquestion_uuid on randomquestion(uuid)
+alter table randomquestion add column remoteip varchar(40);
 
 

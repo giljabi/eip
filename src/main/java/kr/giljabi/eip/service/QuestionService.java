@@ -25,7 +25,7 @@ public class QuestionService {
         this.randomQuestionRepository = randomQuestionRepository;
     }
 
-    public List<Question> getRandomQuestions(Integer subjectId, String uuid) {
+    public List<Question> getRandomQuestions(Integer subjectId, String uuid, String remoteip) {
         List<Question> lists;
         if(subjectId == 0)
             lists = questionRepository.findRandomQuestions(maxQuestion);
@@ -38,6 +38,7 @@ public class QuestionService {
                     RandomQuestion randomQuestion = new RandomQuestion();
                     randomQuestion.setUuid(uuid);
                     randomQuestion.setQuestionId(question.getId());
+                    randomQuestion.setRemoteip(remoteip);
                     return randomQuestion;
                 })
                 .collect(Collectors.toList());
