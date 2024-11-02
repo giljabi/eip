@@ -4,7 +4,7 @@
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
 
-    <property name="LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss}.%-3relative] %-5level ${PID:-}[%15.15thread] %logger{36}.%M : %msg%n"/>
+    <property name="LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level ${PID:-}[%15.15thread] %logger{36}.%M : %msg%n"/>
 
     <!-- Local -->
     <springProfile name="local">
