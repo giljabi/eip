@@ -1,6 +1,7 @@
 package kr.giljabi.eip.service;
 
 import kr.giljabi.eip.dto.response.AnswerCorrectPercentageDto;
+import kr.giljabi.eip.model.QName;
 import kr.giljabi.eip.model.Question;
 import kr.giljabi.eip.model.RandomQuestion;
 import kr.giljabi.eip.repository.QuestionRepository;
@@ -51,8 +52,8 @@ public class QuestionService {
         return lists;
     }
 
-    public AnswerCorrectPercentageDto findCorrectByQuestionId(Long questionId) {
-        return questionRepository.findCorrectByQuestionId(questionId);
+    public AnswerCorrectPercentageDto findCorrectByQuestionId(Long questionId, QName qid) {
+        return questionRepository.findCorrectByQuestionId(questionId, qid);
     }
 
     public void incrementReplyCount(Long questionId) {
@@ -63,4 +64,5 @@ public class QuestionService {
         questionRepository.incrementCorrectCount(questionId);
     }
 }
+
 

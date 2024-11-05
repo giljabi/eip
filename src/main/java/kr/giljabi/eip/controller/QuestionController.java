@@ -4,6 +4,7 @@ import kr.giljabi.eip.dto.request.AnswerDTO;
 import kr.giljabi.eip.dto.request.AnswerRequest;
 import kr.giljabi.eip.dto.response.AnswerCorrectPercentageDto;
 import kr.giljabi.eip.dto.response.AnswerResult;
+import kr.giljabi.eip.model.QName;
 import kr.giljabi.eip.model.Question;
 import kr.giljabi.eip.model.Results;
 import kr.giljabi.eip.model.Subject;
@@ -105,13 +106,14 @@ public class QuestionController {
 
         for (AnswerDTO answer : answerRequest.getAnswers()) {
             Long questionId = Long.valueOf(answer.getId());
+            QName qName = new QName(answer.getQid(), "");
             Integer userAnswer = Integer.parseInt(answer.getAnswer());
 
             // 답변 횟수 증가
             questionService.incrementReplyCount(questionId);
 
             // 데이터베이스에서 정답 조회
-            AnswerCorrectPercentageDto correctAnswer = questionService.findCorrectByQuestionId(questionId);
+            AnswerCorrectPercentageDto correctAnswer = questionService.findCorrectByQuestionId(questionId, qName);
 
             // 정답 여부 확인
             boolean isCorrect = correctAnswer.getCorrect() == userAnswer;
@@ -119,8 +121,8 @@ public class QuestionController {
             if (isCorrect) {
                 questionService.incrementCorrectCount(questionId);
             }
-            //
-            correctAnswer = questionService.findCorrectByQuestionId(questionId);
+            // 정답 확인 후 결과 저장을 위해 한번더 조회함
+            correctAnswer = questionService.findCorrectByQuestionId(questionId, qName);
 
             // AnswerResult 객체 생성 후 리스트에 추가
             AnswerResult result = new AnswerResult(questionId, userAnswer, correctAnswer.getCorrect(),
@@ -130,7 +132,7 @@ public class QuestionController {
             // 결과 저장
             int correct = isCorrect ? 1 : 0;    // 숫자로 해야 나중에 합산이 편함
             Results userResult = new Results(clientUUID, questionId, userAnswer,
-                    correct, CommonUtils.getClientIp(request));
+                    correct, CommonUtils.getClientIp(request), qName.getId());
             resultService.save(userResult);
             System.out.println("userResult: " + userResult.toString());
         }
@@ -140,4 +142,5 @@ public class QuestionController {
         return ResponseEntity.ok(results);
     }
 }
+
 

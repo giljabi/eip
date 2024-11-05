@@ -22,8 +22,9 @@ public class ResultsController {
         this.resultService = resultService;
     }
 
-    @GetMapping("/results")
-    public String getResultByUuid(HttpServletRequest request,
+    @GetMapping("/results/{qid}")
+    public String getResultByUuid(@PathVariable Integer qid,
+                                  HttpServletRequest request,
                                   Model model) {
         String uuid = CommonUtils.getCookieValue(request, CommonUtils.UUID_COOKIE_NAME);
         List<UserResultDTO> results = resultService.findByUuid(uuid);

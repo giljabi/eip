@@ -57,7 +57,7 @@ $(document).ready(function () {
 
 
     $('#viewResultsButton').click(function () {
-        const url = '/questions/results';
+        const url = '/questions/results/' + qid;
         const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
 
 /*        // 팝업 차단 방지를 위해 창이 제대로 열리지 않은 경우 처리
@@ -114,7 +114,8 @@ $(document).ready(function () {
 
             userAnswer.push({
                 id: questionId,
-                answer: selectedChoice
+                answer: selectedChoice,
+                qid: qid
             });
         });
 
@@ -171,5 +172,6 @@ $(document).ready(function () {
     }
 
 });
+
 
 

@@ -30,8 +30,8 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     List<Question> findRandomQuestions(@Param("limits") int limits, Integer subjectId, @Param("qid") Integer qid);
 
     @Query("SELECT new kr.giljabi.eip.dto.response.AnswerCorrectPercentageDto(q.correct, q.correctCount, q.replyCount) " +
-            "FROM Question q WHERE q.id = :id")
-    AnswerCorrectPercentageDto findCorrectByQuestionId(Long id);
+            "FROM Question q WHERE q.id = :id AND q.qid = :qid")
+    AnswerCorrectPercentageDto findCorrectByQuestionId(Long id, QName qid);
 
     @Modifying
     @Transactional
@@ -51,5 +51,6 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     @Query("SELECT COALESCE(MAX(q.id), 0) FROM Question q")
     Long findMaxId();
 }
+
 
 

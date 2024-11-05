@@ -13,12 +13,15 @@ import java.time.LocalDateTime;
 @ToString
 @Table(name = "results")
 public class Results {
-    public Results(String uuid, Long questionId, Integer answerNo, Integer correctflag, String remoteip) {
+    public Results(String uuid, Long questionId, Integer answerNo,
+                   Integer correctflag, String remoteip,
+                   Integer qid) {
         this.uuid = uuid;
         this.questionId = questionId;
         this.answerNo = answerNo;
         this.correctflag = correctflag;
         this.remoteip = remoteip;
+        this.qid = qid;
     }
 
     @Id
@@ -40,6 +43,8 @@ public class Results {
 
     private String remoteip;
 
+    private Integer qid;
+
     public Results() {
 
     }
@@ -50,3 +55,4 @@ public class Results {
     }
 
 }
+
