@@ -24,8 +24,8 @@ public class ResultsService {
         return resultsRepository.save(result);
     }
 
-    public List<UserResultDTO> findByUuid(String uuid) {
-        return resultsRepository.findByUuid(uuid);
+    public List<UserResultDTO> findByUuid(String uuid, Integer qid) {
+        return resultsRepository.findByUuid(uuid, qid);
     }
 
     /*

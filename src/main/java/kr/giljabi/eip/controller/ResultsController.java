@@ -27,7 +27,7 @@ public class ResultsController {
                                   HttpServletRequest request,
                                   Model model) {
         String uuid = CommonUtils.getCookieValue(request, CommonUtils.UUID_COOKIE_NAME);
-        List<UserResultDTO> results = resultService.findByUuid(uuid);
+        List<UserResultDTO> results = resultService.findByUuid(uuid, qid);
         model.addAttribute("results", results);
         return "questions/results";
     }

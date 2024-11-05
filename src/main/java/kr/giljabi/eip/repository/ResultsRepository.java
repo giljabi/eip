@@ -18,7 +18,8 @@ public interface ResultsRepository extends JpaRepository<Results, Long> {
                     "JOIN Results b ON a.id = b.questionId\n" +
                     "JOIN Subject c ON a.subject.id = c.id\n" +
                     "WHERE b.uuid = :uuid\n" +
+                    "AND b.qid = :qid\n" +
                     "GROUP BY c.id, c.name\n" +
                     "ORDER BY c.id")
-    List<UserResultDTO> findByUuid(@Param("uuid") String uuid);
+    List<UserResultDTO> findByUuid(@Param("uuid") String uuid, @Param("qid") Integer qid);
 }
