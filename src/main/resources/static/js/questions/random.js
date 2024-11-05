@@ -1,3 +1,4 @@
+let qid;
 
 function getCookie(name) {
     const value = `; ${document.cookie}`;
@@ -6,10 +7,38 @@ function getCookie(name) {
     return null;
 }
 
+//현재 콤보에서 선택하므로 qid는 필요없다
 function selectSubject() {
     const subjectSelect = $('#subjectSelect').val();
-    const url = '/questions/random/' + subjectSelect;
+    const url = '/questions/random/' + qid + '/' + subjectSelect;
     window.location.href = url;
+}
+
+function makeSubjectList(qid) {
+    $.ajax({
+        url: '/questions/random/' + qid,
+        type: 'GET',
+        contentType: 'application/json',
+        credentials: 'include',
+        async: false,
+        success: function (response) {
+            //reponse가 null이면 /로 보낸다
+            if(response.length == 0) {
+                alert('접근 절차가 잘못되었습니다. 첫화면부터 시작해주세요');
+                window.location.href = '/';
+            } else {
+                $.each(response, function(index, item) {
+                    $('#subjectSelect').append(new Option(item.name, item.id));
+                });
+            }
+            //console.log(response);
+        },
+        error: function (xhr, status, error) {
+            alert('Failed to submit answers.');
+            console.error(error);
+        }
+    });
+
 }
 
 
@@ -18,8 +47,12 @@ $(document).ready(function () {
     $('#submitButton').show();
 
     const path = window.location.pathname;
-    const subjectId = path.split('/').pop(); // 마지막 경로를 추출하여 subjectId로 사용
+
+    qid = path.split('/')[3];
+    makeSubjectList(qid);
+
     // select 박스의 값 설정
+    const subjectId = path.split('/')[4];
     $('#subjectSelect').val(subjectId);
 
 
@@ -39,7 +72,7 @@ $(document).ready(function () {
         setTimeout(function () {
             $('#retryOverlay').fadeOut();
             const subjectSelect = $('#subjectSelect').val();
-            const url = '/questions/random/' + subjectSelect;
+            const url = '/questions/random/' + qid + '/' + subjectSelect;
             window.location.href = url;
         }, 1000);
 
@@ -138,3 +171,5 @@ $(document).ready(function () {
     }
 
 });
+
+

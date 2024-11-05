@@ -7,6 +7,7 @@ import kr.giljabi.eip.repository.QuestionRepository;
 import kr.giljabi.eip.repository.RandomQuestionRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,12 +26,13 @@ public class QuestionService {
         this.randomQuestionRepository = randomQuestionRepository;
     }
 
-    public List<Question> getRandomQuestions(Integer subjectId, String uuid, String remoteip) {
+    public List<Question> getRandomQuestions(Integer qId, Integer subjectId, String uuid, String remoteip) {
         List<Question> lists;
-        if(subjectId == 0)
-            lists = questionRepository.findRandomQuestions(maxQuestion);
-        else
-            lists = questionRepository.findRandomQuestions(maxQuestion, subjectId);
+        if(subjectId == 0) {
+            lists = questionRepository.findRandomQuestions(maxQuestion, qId);
+            //lists = questionRepository.findRandomQuestionsTest(qId);
+        } else
+            lists = questionRepository.findRandomQuestions(maxQuestion, subjectId, qId);
 
         // 가져온 List<Question>을 List<RandomQuestion>으로 변환
         List<RandomQuestion> randomQuestions = lists.stream()
@@ -61,3 +63,4 @@ public class QuestionService {
         questionRepository.incrementCorrectCount(questionId);
     }
 }
+

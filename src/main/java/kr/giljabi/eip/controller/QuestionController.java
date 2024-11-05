@@ -6,6 +6,8 @@ import kr.giljabi.eip.dto.response.AnswerCorrectPercentageDto;
 import kr.giljabi.eip.dto.response.AnswerResult;
 import kr.giljabi.eip.model.Question;
 import kr.giljabi.eip.model.Results;
+import kr.giljabi.eip.model.Subject;
+import kr.giljabi.eip.repository.SubjectRepository;
 import kr.giljabi.eip.service.QuestionService;
 import kr.giljabi.eip.service.ResultsService;
 import kr.giljabi.eip.util.CommonUtils;
@@ -18,7 +20,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,12 +28,13 @@ import java.util.UUID;
 public class QuestionController {
     private final QuestionService questionService;
     private final ResultsService resultService;
+    private final SubjectRepository subjectRepository;
 
-    public QuestionController(QuestionService questionService, ResultsService resultService) {
+    public QuestionController(QuestionService questionService, ResultsService resultService, SubjectRepository subjectRepository) {
         this.questionService = questionService;
         this.resultService = resultService;
+        this.subjectRepository = subjectRepository;
     }
-
 
     @GetMapping("/generate-uuid")
     public String generateUuid(HttpServletRequest request, HttpServletResponse response) {
@@ -51,8 +53,25 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @GetMapping("/random/{subjectId}")
-    public String getRandomQuestions(@PathVariable Integer subjectId,
+    @GetMapping("/random/{qid}")
+    public ResponseEntity<List<Subject>> getSubject(@PathVariable Integer qid,
+                             HttpServletRequest request,
+                             Model model) {
+        //uuid cookie가 없으면 첫화면부터 시작하게 한다.
+        String uuid = CommonUtils.getCookieValue(request, CommonUtils.UUID_COOKIE_NAME);        // UUID 생성
+        if (uuid == null) {
+            model.addAttribute("results", null);
+            return ResponseEntity.ok(null);
+        }
+        List<Subject> subjects = subjectRepository.findByQidOrderById(qid);
+        model.addAttribute("results", subjects);
+        return ResponseEntity.ok(subjects);
+    }
+
+
+    @GetMapping("/random/{qid}/{subjectId}")
+    public String getRandomQuestions(@PathVariable Integer qid,
+                                     @PathVariable Integer subjectId,
                                      HttpServletRequest request,
                                      Model model) {
         //uuid cookie가 없으면 첫화면부터 시작하게 한다.
@@ -61,8 +80,7 @@ public class QuestionController {
             model.addAttribute("results", null);
             return "redirect:/";
         }
-
-        List<Question> questions = questionService.getRandomQuestions(subjectId,
+        List<Question> questions = questionService.getRandomQuestions(qid, subjectId,
                 uuid, CommonUtils.getClientIp(request));
         model.addAttribute("questions", questions);
         return "questions/random";
@@ -121,6 +139,5 @@ public class QuestionController {
         model.addAttribute("results", results);
         return ResponseEntity.ok(results);
     }
-
-
 }
+

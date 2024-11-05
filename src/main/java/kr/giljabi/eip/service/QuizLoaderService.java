@@ -1,15 +1,17 @@
 package kr.giljabi.eip.service;
 
-import kr.giljabi.eip.model.Answer;
-import kr.giljabi.eip.model.Choice;
-import kr.giljabi.eip.model.ExamNo;
-import kr.giljabi.eip.model.Question;
+import kr.giljabi.eip.model.*;
 import kr.giljabi.eip.repository.AnswerRepository;
 import kr.giljabi.eip.repository.ChoiceRepository;
 import kr.giljabi.eip.repository.ExamNoRepository;
 import kr.giljabi.eip.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.List;
 
 @Service
 public class QuizLoaderService {
@@ -30,22 +32,40 @@ public class QuizLoaderService {
         this.examNoRepository = examNoRepository;
     }
 
-    //@Transactional
+    @Transactional
     public Question saveQuestion(Question question) {
         return questionRepository.save(question);
     }
 
-    //@Transactional
+    public int  deleteAllByQuestionExamNoAndQid(ExamNo examNo, QName qname) {
+        return questionRepository.deleteAllByExamNoAndQid(examNo, qname);
+    }
+
+    public int deleteAllChoiceExamNoIdAndQid(Integer examNoId, Integer qid) {
+        return choiceRepository.deleteByExamNoIdAndQid(examNoId, qid);
+    }
+
+    public ExamNo findExamNoById(Integer id) {
+        return examNoRepository.findById(id).orElse(null);
+    }
+
+    public Long findQuestionMaxId() {
+        return questionRepository.findMaxId();
+    }
+
+    @Transactional
     public Choice saveChoice(Choice choice) {
         return choiceRepository.save(choice);
     }
 
-    //@Transactional
-    public Answer saveAnswer(Answer answer) {
-        return answerRepository.save(answer);
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Transactional
+    public void resetQuestionIdSequence(Long start) {
+        entityManager.createNativeQuery("ALTER SEQUENCE question_id_seq RESTART WITH " + start.longValue())
+                .executeUpdate();
     }
-    //@Transactional
-    public ExamNo saveExamNo(ExamNo examNo) {
-        return examNoRepository.save(examNo);
-    }
+
 }
+

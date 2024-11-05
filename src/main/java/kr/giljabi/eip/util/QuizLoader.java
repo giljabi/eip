@@ -1,16 +1,16 @@
 package kr.giljabi.eip.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.giljabi.eip.model.*;
 import kr.giljabi.eip.service.QuizLoaderService;
+import lombok.ToString;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class QuizLoader {
@@ -21,7 +21,7 @@ public class QuizLoader {
     private List<String> questionList = new ArrayList<>();
     private List<List<String>> choiceList = new ArrayList<>();
     private List<String> answerList = new ArrayList<>();
-    private String[] examInfo = new String[3];
+    private ExamNoData  examNoData = new ExamNoData();
 
     public QuizLoader(QuizLoaderService quizLoaderService) {
         this.quizLoaderService = quizLoaderService;
@@ -35,16 +35,17 @@ public class QuizLoader {
     // Helper method to assign subject based on question number
     private Subject getSubjectByQuestionNo(int questionNo) {
         int subjectId = 0;
+        int subjectBase =  (examNoData.qid.intValue() - 1) * 5; //기사는 5과목
         if (questionNo >= 1 && questionNo <= 20) {
-            subjectId = 1;
+            subjectId = 1 + subjectBase;
         } else if (questionNo >= 21 && questionNo <= 40) {
-            subjectId = 2;
+            subjectId = 2 + subjectBase;
         } else if (questionNo >= 41 && questionNo <= 60) {
-            subjectId = 3;
+            subjectId = 3 + subjectBase;
         } else if (questionNo >= 61 && questionNo <= 80) {
-            subjectId = 4;
+            subjectId = 4 + subjectBase;
         } else if (questionNo >= 81 && questionNo <= 100) {
-            subjectId = 5;
+            subjectId = 5 + subjectBase;
         }
 
         // Subject 객체를 subjectId로 생성하거나 기존 값을 로드 (가정: 로드된 값)
@@ -57,50 +58,72 @@ public class QuizLoader {
     private void insertData() {
         System.out.println("questionList.size(): " + questionList.size());
 
-        ExamYear examYear = new ExamYear();
-        examYear.setId(Integer.parseInt(examInfo[1])); // 시험년도ID
-
-        ExamNo examNo = new ExamNo();
-        examNo.setExamYear(examYear);
-        examNo.setName(examInfo[2]);
-        examNo.setExamDay(examInfo[0]);
+        QName qname = new QName(examNoData.qid, ""); //과목명은 여기서는 의미없음
+        ExamNo examNo = quizLoaderService.findExamNoById(examNoData.id);
         System.out.println("examNo: " + examNo.toString());
-        quizLoaderService.saveExamNo(examNo);
+
+        int count = quizLoaderService.deleteAllChoiceExamNoIdAndQid(examNo.getId(), qname.getId());
+        System.out.println("deleteAllChoiceExamNoIdAndQid: " + count);
+        count =  quizLoaderService.deleteAllByQuestionExamNoAndQid(examNo, qname);
+        System.out.println("deleteAllByQuestionExamNoAndQid:" + count);
 
         int i = 0;
         try {
             for (; i < questionList.size(); i++) {
-/*                Answer answer = new Answer(); //question 테이블로 이동
-                //answer.setQuestion(question);
-                answer.setCorrect(Integer.parseInt(answerList.get(i)));
-                answer.setExamnoId(examNo.getId());
-                System.out.println("Answer: " + answer.toString());
-                quizLoaderService.saveAnswer(answer);*/
+                Map<String, Boolean> imageFlagMap = new HashMap<>();  //질문 qif, 선택 cif에서 이미지 사용유무 flag
+                imageFlagMap.put("qif", false); //초기값
+                imageFlagMap.put("cif", false);
 
                 Question question = new Question();
                 question.setSubject(getSubjectByQuestionNo(i + 1));
-                question.setExamNo(examNo);
+                question.setExamNo(examNo); //examNo.get()
                 question.setCorrect(Integer.parseInt(answerList.get(i)));
+
+                if(questionList.get(i).indexOf("}}") > 0) {
+                    imageFlagMap = checkImageFlag(i);
+                }
+
                 String questionParts = questionList.get(i).substring(questionList.get(i).indexOf(" "));
                 question.setName(questionParts.trim());  // 질문
                 question.setNo(i + 1);
                 question.setCorrectCount(0);
                 question.setReplyCount(0);
-                question.setQuestionImageFlag(false);
-                question.setChoiceImageFlag(false);
-
+                question.setQuestionImageFlag(imageFlagMap.get("qif"));
+                question.setChoiceImageFlag(imageFlagMap.get("cif"));
+                question.setUseFlag(false); //사용여부는 모든 문제 확인 후 true로 변경
+                question.setQid(qname);
                 System.out.println("Question: " + question.toString());
-                quizLoaderService.saveQuestion(question);
+                quizLoaderService.saveQuestion(question);   //저장해야 id가 생성됨
+
+                //질문에 이미지가 있으면 이미지 경로를 미리 저장
+                if(imageFlagMap.get("qif")) {
+                    question.setImageUrl(String.format("/images/q/%s/%d.png",
+                            examNo.getExamYear().getName(),
+                            question.getId()));
+                    System.out.println("Question: " + question.toString());
+                }
 
                 List<String> items = choiceList.get(i);
+                List<Choice> itemList = new ArrayList<>();
                 for (int j = 0; j < items.size(); j++) {
                     Choice choice = new Choice();
                     choice.setQuestion(question);
                     choice.setNo(j + 1);
                     choice.setName(items.get(j));
+
+                    //선택지에 이미지가 있으면 이미지 경로를 미리 저장
+                    if(imageFlagMap.get("cif")) {
+                        choice.setImageUrl(String.format("/images/q/%s/%d-%d.png",
+                                examNo.getExamYear().getName(),
+                                question.getId(),
+                                choice.getNo()));    //선택지 번호
+                        System.out.println("Choice image: " + choice.toString());
+                    }
+                    itemList.add(choice);
                     System.out.println("Choice: " + choice.toString());
-                    quizLoaderService.saveChoice(choice);
                 }
+                question.setChoices(itemList);
+                quizLoaderService.saveQuestion(question);
                 Thread.sleep(50);
             } // end of for questionList
 
@@ -111,6 +134,25 @@ public class QuizLoader {
         questionList.clear();
         choiceList.clear();
         answerList.clear();
+    }
+
+    private Map<String, Boolean> checkImageFlag(int i) throws JsonProcessingException {
+        Map<String, Boolean> imageFlagMap;
+        imageFlagMap = new HashMap<>();  //질문 qif, 선택 cif에서 이미지 사용유무 flag
+
+        String flagData = questionList.get(i).substring(0, questionList.get(i).indexOf("}}") + 2);
+        flagData = flagData.replace("{{", "{").replace("}}", "}");
+        flagData = flagData.replace("qif", "\"qif\"");
+        flagData = flagData.replace("cif", "\"cif\"");
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Integer> map = mapper.readValue(flagData, Map.class);
+
+        // Integer 값을 Boolean으로 변환
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            imageFlagMap.put(entry.getKey(), entry.getValue() == 1);
+        }
+        System.out.println("flagData: " + imageFlagMap);
+        return imageFlagMap;
     }
 
     public void loadQuestions(String filename) {
@@ -130,11 +172,22 @@ public class QuizLoader {
                     if (line.isEmpty()) continue; // 빈 줄은 무시 (빈 줄이 있을 수 있음
 
                     if (line.indexOf("###") >= 0) {
-                        String[] parts = line.substring(3).split(", ");
-                        examInfo[0] = parts[0].trim();
+                        String[] parts = line.substring(3).split(",");
+                        examNoData.id = Integer.parseInt(parts[0].split(":")[1].trim()); // 시험차수ID
+                        examNoData.qid = Integer.parseInt(parts[1].split(":")[1].trim()); // 과목ID
+                        //examNoData.id = Integer.parseInt(parts[2].split(":")[1].trim()); // 차수ID
+                        //examNoData.examYearId = Integer.parseInt(parts[1].split(":")[1].trim()); // "시험년도ID:
+                        //examNoData.name = parts[3].split(":")[1].trim();// 차수명
+                        //examNoData.examday = parts[0].trim();//시험일
+                        //examNoData.qid = Long.parseLong(parts[4].split(":")[0].trim()); //시험과목 ID
+                        System.out.println("examNoData: " + examNoData.toString());
+
+/*                        examInfo[0] = parts[0].trim();    //시험 실시월
                         examInfo[1] = parts[1].split(":")[1].trim(); // "시험년도ID:
-                        examInfo[2] = parts[2].split(":")[1].trim(); // 차수명, "차수ID:
-                        System.out.println("examInfo: " + examInfo.toString());
+                        examInfo[2] = parts[2].split(":")[1].trim(); // 차수ID
+                        examInfo[3] = parts[3].split(":")[1].trim(); // 차수명
+                        examInfo[4] = parts[4].split(":")[0].trim(); // 시험명
+                        System.out.println("examInfo: " + examNoData.toString());*/
                         lineCounter = 0;
                         continue;
                     }
@@ -179,6 +232,20 @@ public class QuizLoader {
             System.out.println(); // 빈 줄로 구분
         }
     }
+
+    @ToString
+    //question 입력시 사용하는 ExanoNoData 클래스
+    public class ExamNoData {
+        public Integer id;          //examno.id
+        public Integer qid;         //시험과목 ID
+//        public Integer examYearId;  //examyear.id
+//        public String name;         //examno.name
+//        public String examday;      //examno.examday
+
+        public ExamNoData() {
+        }
+    }
+
 /*
     public static void main(String[] args) {
         kr.giljabi.eip.QuizLoader loader = new kr.giljabi.eip.QuizLoader();
@@ -186,5 +253,7 @@ public class QuizLoader {
         loader.printQuestionsAndChoices();
     }*/
 }
+
+
 
 

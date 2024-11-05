@@ -1,10 +1,21 @@
 package kr.giljabi.eip.repository;
 
 import kr.giljabi.eip.model.Choice;
+import kr.giljabi.eip.model.ExamNo;
+import kr.giljabi.eip.model.QName;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface ChoiceRepository extends JpaRepository<Choice, Integer> {
-    // 필요에 따라 추가적인 메서드를 정의할 수 있습니다.
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Choice c WHERE c.question.id IN (SELECT q.id FROM Question q WHERE q.examNo.id = :examNoId AND q.qid.id = :qid)")
+    int deleteByExamNoIdAndQid(@Param("examNoId") Integer examNoId, @Param("qid") Integer qid);
 }
+

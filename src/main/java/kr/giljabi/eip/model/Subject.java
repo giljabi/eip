@@ -19,4 +19,5 @@ public class Subject {
     @Column(nullable = false)
     private String name;
 
+    private Integer qid;
 }

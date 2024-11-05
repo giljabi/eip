@@ -55,9 +55,16 @@ public class Question {
     @Column(name="correctcount", nullable = false)
     private Integer correctCount;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(name="useflag")
+    private boolean useFlag;
+
+    @ManyToOne
+    @JoinColumn(name = "qid", nullable = false)
+    private QName qid;
+
+    @OneToMany(mappedBy = "question", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("id ASC")
     private List<Choice> choices;  // 각 Question이 여러 Choice를 가짐
 
-
 }
+
