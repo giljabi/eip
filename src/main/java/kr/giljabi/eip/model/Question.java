@@ -62,6 +62,7 @@ public class Question {
     @JoinColumn(name = "qid", nullable = false)
     private QName qid;
 
+    //, fetch = FetchType.EAGER DB insert할때는 사용하지 않아야 함
     @OneToMany(mappedBy = "question", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("id ASC")
     private List<Choice> choices;  // 각 Question이 여러 Choice를 가짐
