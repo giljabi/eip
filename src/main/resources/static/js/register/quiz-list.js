@@ -54,7 +54,7 @@ $(document).ready(function() {
                                     <ul>
                                         ${item.choices.map(choice => `
                                                 <li>
-                                                    ${choice.no} ${choice.name}<br>
+                                                    ${choice.name}<br>
                                                     ${item.choiceImageFlag ? `<img src="${choice.imageUrl}" width="100" />` : ''}
                                                 </li>
                                             `).join('')}
