@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question & Choice Form</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery 사용 -->
+    <script src="/js/common/utils.js"></script>
+    <script src="/js/register/quiz.js"></script>
+</head>
+<body>
+<form th:method="post" id="questionForm" enctype="multipart/form-data">
+<div class="container my-5">
+    <h2>Form</h2>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label" for="useFlag">Use Flag</label>
+        <div class="col-sm-10">
+            <input type="checkbox" class="form-check-input" id="useFlag" name="useFlag"
+                   th:checked="${question.useFlag}">
+        </div>
+    </div>
+
+    <!-- 시험일 -->
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label" for="examId">Date</label>
+        <div class="col-sm-10">
+            <select id="examId" class="form-select">
+                <option value="0">선택</option>
+                <option th:each="exam : ${examNo}"
+                        th:value="${exam.id}"
+                        th:text="${exam.examDay}"></option>
+            </select>
+        </div>
+    </div>
+
+    <!-- 종목 -->
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label" for="qid">Certificate</label>
+        <div class="col-sm-10">
+            <select id="qid" class="form-select">
+                <option value="0">선택</option>
+                <option th:each="q : ${qname}"
+                        th:value="${q.id}"
+                        th:text="${q.name}"></option>
+            </select>
+        </div>
+    </div>
+
+    <!-- 과목 -->
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label" for="subjectId">Subject</label>
+        <div class="col-sm-10">
+            <select id="subjectId" class="form-select">
+                <option value="0">선택</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- 문제번호 -->
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label" for="no">Question Number</label>
+        <div class="col-sm-10">
+            <input type="number" class="form-control" id="no" name="no"
+                   placeholder="Question No" th:value="${question.no}">
+        </div>
+    </div>
+    <!-- 문제 -->
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label" for="name">Question</label>
+        <div class="col-sm-10">
+            <textarea class="form-control" id="name" name="name" rows="4"
+                      placeholder="Question " th:text="${question.name}"></textarea>
+        </div>
+    </div>
+
+    <!-- 정답 -->
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label" for="correct">Correct</label>
+        <div class="col-sm-10">
+            <select id="correct" class="form-select">
+                <option value=""></option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="3">4</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- 문제 이미지 -->
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label" for="questionImageFile">Image URL</label>
+        <div class="col-sm-10">
+            <div id="questionImageFileName" th:text="${question.imageUrl}"></div>
+            <input type="file" class="form-control" id="questionImageFile" name="questionImageFile"
+                   accept=".png, .jpg, .jpeg">
+        </div>
+    </div>
+<!--    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label" for="questionImageFlag">Question Image Flag</label>
+        <div class="col-sm-10">
+            <input type="checkbox" class="form-check-input" id="questionImageFlag" name="questionImageFlag"
+                   disable th:checked="${question.questionImageFlag}">
+        </div>
+    </div>-->
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label" for="choiceImageFlag">Choice Image Flag</label>
+        <div class="col-sm-10">
+            <input type="checkbox" class="form-check-input" id="choiceImageFlag" name="choiceImageFlag"
+                   disable th:checked="${question.choiceImageFlag}">
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="row mb-3">
+        <div class="col-sm-3">
+            <input readonly type="number" class="form-control" id="choiceNo1" name="choiceNo1"
+                   placeholder="Choice No" style="width: 60px;height: 62px;" value="1">
+        </div>
+        <div class="col-sm-5">
+            <textarea class="form-control" id="choiceName1" name="choiceName1" rows="2"
+                      placeholder=" " th:text="${choice[0].name}"></textarea>
+        </div>
+        <div class="col-sm-4">
+            <input type="file" class="form-control" id="choiceFile1" name="choiceFile1"
+                   accept=".png, .jpg, .jpeg">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-3">
+            <input readonly type="number" class="form-control" id="choiceNo2" name="choiceNo2"
+                   placeholder="Choice No" style="width: 60px;height: 62px;" value="2">
+        </div>
+        <div class="col-sm-5">
+            <textarea class="form-control" id="choiceName2" name="choiceName2" rows="2"
+                      placeholder=" " th:text="${choice[1].name}"></textarea>
+        </div>
+        <div class="col-sm-4">
+            <input type="file" class="form-control" id="choiceFile2" name="choiceFile2"
+                   accept=".png, .jpg, .jpeg">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-3">
+            <input readonly type="number" class="form-control" id="choiceNo3" name="choiceNo3"
+                   placeholder="Choice No" style="width: 60px;height: 62px;" value="3">
+        </div>
+        <div class="col-sm-5">
+            <textarea class="form-control" id="choiceName3" name="choiceName3" rows="2"
+                      placeholder=" " th:text="${choice[2].name}"></textarea>
+        </div>
+        <div class="col-sm-4">
+            <input type="file" class="form-control" id="choiceFile3" name="choiceFile3"
+                   accept=".png, .jpg, .jpeg">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-3">
+            <input readonly type="number" class="form-control" id="choiceNo4" name="choiceNo4"
+                   placeholder="Choice No" style="width: 60px;height: 62px;" value="4">
+        </div>
+        <div class="col-sm-5">
+            <textarea class="form-control" id="choiceName4" name="choiceName4" rows="2"
+                      placeholder=" " th:text="${choice[3].name}"></textarea>
+        </div>
+        <div class="col-sm-4">
+            <input type="file" class="form-control" id="choiceFile4" name="choiceFile4"
+                   accept=".png, .jpg, .jpeg">
+        </div>
+    </div>
+    <button type="button" id="submitButton" class="btn btn-primary">Submit</button>
+</div>
+</form>
+</body>
+</html>
+

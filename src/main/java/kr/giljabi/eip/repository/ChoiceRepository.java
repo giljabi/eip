@@ -10,12 +10,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 public interface ChoiceRepository extends JpaRepository<Choice, Integer> {
 
     @Modifying
-    @Transactional
     @Query("DELETE FROM Choice c WHERE c.question.id IN (SELECT q.id FROM Question q WHERE q.examNo.id = :examNoId AND q.qid.id = :qid)")
     int deleteByExamNoIdAndQid(@Param("examNoId") Integer examNoId, @Param("qid") Integer qid);
+
 }
+
 
