@@ -131,3 +131,7 @@ create index idx_randomquestion_uuid on randomquestion(uuid)
 alter table randomquestion add column remoteip varchar(40);
 
 
+alter table results add column qid int;
+alter table results add column remoteip varchar(40);
+
+

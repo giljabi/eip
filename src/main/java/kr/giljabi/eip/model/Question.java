@@ -1,5 +1,6 @@
 package kr.giljabi.eip.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -62,10 +63,30 @@ public class Question {
     @JoinColumn(name = "qid", nullable = false)
     private QName qid;
 
-    //, fetch = FetchType.EAGER DB insert할때는 사용하지 않아야 함
     @OneToMany(mappedBy = "question", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("id ASC")
-    private List<Choice> choices;  // 각 Question이 여러 Choice를 가짐
+    //@JsonIgnore //toString에서 순환참조가 발생하므로 json으로 변환할 때 무시하는 방법
+    private List<Choice> choices;  // 각 Question은 4개 선택지를 소유함
 
+    @Override
+    public String toString() {
+        return "Question{" +
+                "id=" + id +
+                ", examNo=" + examNo +
+                ", subject=" + subject +
+                ", correct=" + correct +
+                ", name='" + name + '\'' +
+                ", no=" + no +
+                ", questionImageFlag=" + questionImageFlag +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", choiceImageFlag=" + choiceImageFlag +
+                ", replyCount=" + replyCount +
+                ", correctCount=" + correctCount +
+                ", useFlag=" + useFlag +
+                ", qid=" + qid +
+                //", choices=" + choices + //순환참조 발생
+                '}';
+    }
 }
+
 
