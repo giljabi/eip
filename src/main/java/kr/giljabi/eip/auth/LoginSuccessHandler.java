@@ -1,5 +1,5 @@
 package kr.giljabi.eip.auth;
-/*
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.DefaultRedirectStrategy;
@@ -21,10 +21,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         @Override
         public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                         Authentication authentication) throws IOException {
-
-                String lang = localeResolver.resolveLocale(request).getLanguage();
-
-                this.redirectStratgy.sendRedirect(request, response, "/?lang=" + lang);
+                this.redirectStratgy.sendRedirect(request, response, "/register/quiz-list");
         }
 
-}*/
+}
+

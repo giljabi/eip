@@ -1,6 +1,4 @@
 package kr.giljabi.eip.config;
-/*
-
 
 import kr.giljabi.eip.auth.LoginFailureHandler;
 import kr.giljabi.eip.auth.LoginSuccessHandler;
@@ -46,12 +44,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                         .csrf().disable()
                 .authorizeRequests()
-                .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-                .permitAll()
-                .antMatchers("/user/login", "/user/find-id", "/user/find-password", "/home/ubuntu/eip/images/**", "/monitor/profile")
-                .permitAll()
-                .antMatchers("/**")
-                .authenticated();
+                .antMatchers("/index.html", "/css/**", "/js/**", "/login.html",
+                        "/questions/**", "/user/login").permitAll()
+                // /user/** 경로는 로그인한 사용자만 접근 가능
+                .antMatchers("/user/**", "/register/**").authenticated()
+                .anyRequest().permitAll()
+                .and();
 
         http
                 .formLogin()
@@ -69,19 +67,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/user/login")
                 .invalidateHttpSession(true)
                 .permitAll();
-
-        http
-                .sessionManagement()
-                .maximumSessions(1)
-                .expiredUrl("/user/login?expired")
-                .maxSessionsPreventsLogin(true)
-                .and()
-                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-                .invalidSessionUrl("/user/login");
     }
 
         @Override
         public void configure(AuthenticationManagerBuilder auth) throws Exception {
                 auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
         }
-}*/
+}
