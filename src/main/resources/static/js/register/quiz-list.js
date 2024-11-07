@@ -47,7 +47,7 @@ $(document).ready(function() {
                                 <td class="text-left d-none d-md-table-cell">${item.subjectName}</td>
                                 <td class="text-end d-none d-md-table-cell">${item.no}</td>
                                 <td>${item.name}<br>
-                                    ${item.questionImageFlag ? `<img src="${item.imageUrl}" width="300" />` : ''}
+                                    ${item.questionImageFlag ? `<img src="${item.imageUrl}" />` : ''}
                                 </td>
                                 <td class="text-center">${answerCheck ? item.correct : ''}</td>
                                 <td>
@@ -55,7 +55,7 @@ $(document).ready(function() {
                                         ${item.choices.map(choice => `
                                                 <li>
                                                     ${choice.name}<br>
-                                                    ${item.choiceImageFlag ? `<img src="${choice.imageUrl}" width="100" />` : ''}
+                                                    ${item.choiceImageFlag ? `<img src="${choice.imageUrl}" />` : ''}
                                                 </li>
                                             `).join('')}
                                     </ul>
