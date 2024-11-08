@@ -108,79 +108,90 @@ public class QuestionService {
      * 질문지와 선택지, 그림을 저장
      * @param quizRequest
      * @param questionImageFile
-     * @param choiceFile1
-     * @param choiceFile2
-     * @param choiceFile3
-     * @param choiceFile4
      * @param examNo
      */
     @Transactional(rollbackFor = Exception.class) // 예외 발생 시 전체 롤백, 이미지는 제외
     public void saveQuestionAndChoices(QuizRequest quizRequest, MultipartFile questionImageFile,
-                                       MultipartFile choiceFile1, MultipartFile choiceFile2,
-                                       MultipartFile choiceFile3, MultipartFile choiceFile4,
-                                       ExamNo examNo) {
-        // Question 생성 및 저장
-        Question question = new Question();
-        question.setExamNo(examNo);
-        question.setSubject(subjectService.findById(quizRequest.getSubjectId()));
-        question.setCorrect(quizRequest.getCorrect());
-        question.setName(quizRequest.getName());
-        question.setImageUrl(questionImageFile.getOriginalFilename());
-        question.setNo(quizRequest.getNo());
-        question.setQuestionImageFlag(!questionImageFile.getOriginalFilename().isEmpty());
-        question.setChoiceImageFlag(quizRequest.isChoiceImageFlag());
-        question.setCorrectCount(0);
-        question.setReplyCount(0);
-        question.setUseFlag(quizRequest.isUseFlag());
-        question.setQid(qNameService.findById(quizRequest.getQid()));
-        questionRepository.save(question);
-        log.info("question = {}", question.toString());
+                                       MultipartFile[] choiceFiles, ExamNo examNo) {
+        Question question;
+        boolean modeFlag = quizRequest.getId() == null ? true : false;  //신규등록이면 true, 수정이면 false
+        try {
+            question = modeFlag ?
+                    new Question() : questionRepository.findById(quizRequest.getId()).orElse(null);
 
-        String year = examNo.getExamYear().getName();
-        //X:/git/giljabi/eip/images/
-        if(question.isQuestionImageFlag()) {
-            //질문지의 이미지
-            String fileName = String.format("%d.%s",
-                    question.getId(), CommonUtils.getFileExtension(questionImageFile));
-            String logicalPath = String.format("q/%s/", year);
-            question.setImageUrl("/images/" + logicalPath + fileName);
-            CommonUtils.saveFile(physicalPath + logicalPath, fileName, questionImageFile);
-        }
+           question.setId(quizRequest.getId() == null ? null : quizRequest.getId());
+           question.setExamNo(examNo);
+           question.setSubject(subjectService.findById(quizRequest.getSubjectId()));
+           question.setCorrect(quizRequest.getCorrect());
+           question.setName(quizRequest.getName());
+           question.setNo(quizRequest.getNo());
+           question.setChoiceImageFlag(quizRequest.isChoiceImageFlag());
+           question.setCorrectCount(0);
+           question.setReplyCount(0);
+           question.setUseFlag(quizRequest.isUseFlag());
+           question.setQid(qNameService.findById(quizRequest.getQid()));
+           questionRepository.save(question);
+           log.info("question = {}", question.toString());
 
-        // Choice 생성 및 저장
-        List<Choice> choices = new ArrayList<>();
-        if (quizRequest.isChoiceImageFlag()) { // 선택지가 이미지일 경우
-            MultipartFile[] choiceFiles = { choiceFile1, choiceFile2, choiceFile3, choiceFile4 };
-            for (int i = 0; i < quizRequest.getChoices().size(); i++) {
-                Choice choice = new Choice();
-                choice.setNo(i + 1);
-                choice.setQuestion(question);
-                choice.setName(Integer.toString(i + 1)); //선택지 번호만 입력
+           String year = examNo.getExamYear().getName();
+           if (!questionImageFile.getOriginalFilename().isEmpty()) {//질문지의 이미지
+               String fileName = String.format("%d.%s",
+                       question.getId(), CommonUtils.getFileExtension(questionImageFile));
+               String logicalPath = String.format("q/%s/", year);
+               question.setImageUrl("/images/" + logicalPath + fileName);
+               question.setQuestionImageFlag(true);
+               CommonUtils.saveFile(physicalPath + logicalPath, fileName, questionImageFile);
+           }
 
-                //물리적 저장위치
-                String fileName = String.format("%d-%d.%s",
-                        question.getId(), choice.getNo(), CommonUtils.getFileExtension(choiceFiles[i]));
-                String logicalPath = String.format("q/%s/", year);
-                choice.setImageUrl("/images/" + logicalPath + fileName);
-                choices.add(choice);
-                CommonUtils.saveFile(physicalPath + logicalPath, fileName, choiceFiles[i]);
-            }
-        } else { // 선택지가 이미지가 아닐 경우
-            for (int i = 0; i < quizRequest.getChoices().size(); i++) {
-                Choice choice = new Choice();
-                choice.setNo(i + 1);
-                choice.setQuestion(question);
-                choice.setName(quizRequest.getChoices().get(i));
-                choices.add(choice);
-            }
-        }
-        // Choices 저장
-        choiceService.saveAll(choices);
-        log.info("choices = {}", choices.toString());
+           // Choice 생성 및 저장
+           List<Choice> choices = new ArrayList<>();
+           if (quizRequest.isChoiceImageFlag()) { // 선택지가 이미지일 경우
+               for (int i = 0; i < quizRequest.getChoices().size(); i++) {
+                   Choice choice = new Choice();
+                   choice.setNo(i + 1);
+                   choice.setQuestion(question);
+                   choice.setName(Integer.toString(i + 1)); //선택지 번호만 입력
+
+                   if(question.getChoices().get(i) != null)
+                       choice.setId(question.getChoices().get(i).getId());  //for update
+
+                   if(choiceFiles[i].isEmpty()) { //이미지 사용으로 체크되어 있지만 이미지 수정이 없는 경우는 원 이미지 사용
+                       choice.setImageUrl(question.getChoices().get(i).getImageUrl());
+                   } else {
+                       String fileName = String.format("%d-%d.%s",
+                               question.getId(), choice.getNo(), CommonUtils.getFileExtension(choiceFiles[i]));
+                       String logicalPath = String.format("q/%s/", year);
+                       choice.setImageUrl("/images/" + logicalPath + fileName);
+                       CommonUtils.saveFile(physicalPath + logicalPath, fileName, choiceFiles[i]);
+                   }
+                   choices.add(choice);
+               }
+           } else { // 선택지가 이미지가 아닐 경우
+               for (int i = 0; i < quizRequest.getChoices().size(); i++) {
+                   Choice choice = new Choice();
+                   choice.setNo(i + 1);
+                   choice.setQuestion(question);
+                   choice.setName(quizRequest.getChoices().get(i));
+                   choices.add(choice);
+               }
+           }
+           if(!modeFlag) { // 수정이면 기존 선택지 삭제 후 새로 저장
+               question.getChoices().clear();
+           }
+           question.getChoices().addAll(choices);
+           questionRepository.save(question);
+           log.info("choices = {}", choices.toString());
+       } catch (Exception e) {
+           log.info("saveQuestionAndChoices error = {}", e.getMessage());
+           throw new RuntimeException(e);
+       }
     }
 
-
+    public Question findById(Long id) {
+        return questionRepository.findById(id).orElse(null);
+    }
 }
+
 
 
 

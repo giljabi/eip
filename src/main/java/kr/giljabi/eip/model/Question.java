@@ -1,11 +1,11 @@
 package kr.giljabi.eip.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -66,7 +66,7 @@ public class Question {
     @OneToMany(mappedBy = "question", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("id ASC")
     //@JsonIgnore //toString에서 순환참조가 발생하므로 json으로 변환할 때 무시하는 방법
-    private List<Choice> choices;  // 각 Question은 4개 선택지를 소유함
+    private List<Choice> choices = new ArrayList<>();  // 각 Question은 4개 선택지를 소유함
 
     @Override
     public String toString() {
@@ -88,5 +88,6 @@ public class Question {
                 '}';
     }
 }
+
 
 

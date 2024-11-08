@@ -1,5 +1,6 @@
 package kr.giljabi.eip.controller.register;
 
+import kr.giljabi.eip.dto.query.ExamnoDayDTO;
 import kr.giljabi.eip.dto.request.QuizRequest;
 import kr.giljabi.eip.dto.response.ChoiceDTO;
 import kr.giljabi.eip.dto.response.QuestionDTO;
@@ -8,6 +9,7 @@ import kr.giljabi.eip.dto.response.ResponseCode;
 import kr.giljabi.eip.model.*;
 import kr.giljabi.eip.service.*;
 import kr.giljabi.eip.util.ResponseGenerator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Controller
 @RequestMapping("/register")
 public class QuizController {
@@ -44,14 +47,28 @@ public class QuizController {
     }
 
     @GetMapping("/quiz")
-    public String initQuiz(Model model) {
+    public String initQuestion(Model model) {
         initFormData(model);
+        return "register/quiz";
+    }
+
+    @GetMapping("/quiz/{id}")
+    public String findQuestion(@PathVariable Long id,  Model model) {
+        initFormData(model);
+
+        Question question = questionService.findById(id);
+        model.addAttribute("question", question); //종목
+        model.addAttribute("choice", question.getChoices()); //선택지
+
+        model.addAttribute("examNo", examNoService.findAllByOrderByIdAsc()); //시험일
+        model.addAttribute("subject", subjectService.findByQidOrderById(question.getQid().getId())); //과목
 
         return "register/quiz";
     }
+
     private void initFormData(Model model) {
-        QuestionDTO questionDTO = new QuestionDTO();
-        model.addAttribute("question", questionDTO);
+        Question question = new Question();
+        model.addAttribute("question", question);
 
         ArrayList<ChoiceDTO>  choiceList = new ArrayList<>();
         choiceList.add(new ChoiceDTO());
@@ -60,8 +77,8 @@ public class QuizController {
         choiceList.add(new ChoiceDTO());
         model.addAttribute("choice", choiceList);
 
-        model.addAttribute("examNo", examNoService.findAllByOrderByIdAsc()); //시험일
         model.addAttribute("qname", qNameService.findAll()); //종목
+        model.addAttribute("examNo", examNoService.findAllByOrderByIdAsc()); //시험일
     }
 
 /*
@@ -84,11 +101,25 @@ public class QuizController {
         return ResponseEntity.ok(response);
     }
 
+
     /**
+     * 시험일: 지정된 종목의 문제정보가 있는 시험일을 리턴
+     * @param qid
+     * @return
+     */
+    @GetMapping("/quiz/examnoday/{qid}")
+    public ResponseEntity<Response<List<ExamnoDayDTO>>> getExamnoDay(@PathVariable Integer qid) {
+        List<ExamnoDayDTO> lists = examNoService.getExamnoDay(qid);
+        Response<List<ExamnoDayDTO>> response = ResponseGenerator.success(lists);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * 신규 등록
      * 예외검증은 생략......
      */
     @PostMapping("/quiz")
-    public ResponseEntity<Response<Void>> uploadQuestion(
+    public ResponseEntity<Response<Void>> saveQuestion(
             @RequestPart("jsonData") QuizRequest quizRequest,
             @RequestParam(value = "questionImageFile", required = false) MultipartFile questionImageFile,
             @RequestParam(value = "choiceFile1", required = false) MultipartFile choiceFile1,
@@ -96,30 +127,32 @@ public class QuizController {
             @RequestParam(value = "choiceFile3", required = false) MultipartFile choiceFile3,
             @RequestParam(value = "choiceFile4", required = false) MultipartFile choiceFile4
     ) {
-        System.out.println("uploadQuestion");
+        log.info("saveQuestion");
         try {
             ExamNo examNo = examNoService.findById(quizRequest.getExamId());
             QName qName = qNameService.findById(quizRequest.getQid());
-            //질문지 번호가 이미 있는지 확인해야 함Long examNoId, Long qid, Integer no
-            boolean examNoExist = questionService.findByQidAndExamNoAndNo(
-                    examNo, qName, quizRequest.getNo());
-            if(examNoExist) {
-                Response<Void> response = ResponseGenerator.fail(ResponseCode.UNKNOWN_ERROR,
-                        "종목, 시험차수, 문제 번호가 중복됩니다. 다시 입력해 주세요.");
-                return ResponseEntity.ok(response);
+
+            if(quizRequest.getId() == null) { //신규등록
+                boolean examNoExist = questionService.findByQidAndExamNoAndNo(
+                        examNo, qName, quizRequest.getNo());
+                if (examNoExist) {
+                    Response<Void> response = ResponseGenerator.fail(ResponseCode.UNKNOWN_ERROR,
+                            "종목, 시험차수, 문제 번호가 중복됩니다. 다시 입력해 주세요.");
+                    return ResponseEntity.ok(response);
+                }
             }
-            questionService.saveQuestionAndChoices(quizRequest, questionImageFile,
-                    choiceFile1, choiceFile2, choiceFile3, choiceFile4, examNo);
+            MultipartFile[] choiceFiles = { choiceFile1, choiceFile2, choiceFile3, choiceFile4 };
+            questionService.saveQuestionAndChoices(quizRequest, questionImageFile, choiceFiles, examNo);
 
             Response<Void> response = ResponseGenerator.success();
             return ResponseEntity.ok(response);
-
         } catch (Exception e) {
             e.printStackTrace();
             Response<Void> response = ResponseGenerator.fail(ResponseCode.UNKNOWN_ERROR, e.getMessage());
             return ResponseEntity.ok(response);
         }
     }
+
 
 
 
@@ -165,4 +198,5 @@ public class QuizController {
     }
 
 }
+
 

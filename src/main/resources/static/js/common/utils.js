@@ -32,7 +32,7 @@ function getQNameByQuid(qid) {
                 alert(response.message);
                 return;
             }
-            $('#subjectId').empty();
+            $('#subjectId').empty();    //시험과목은 선택필수로 지정
             $.each(response.data, function(index, item) {
                 $('#subjectId').append(new Option(item.name, item.id));
             });
@@ -42,3 +42,28 @@ function getQNameByQuid(qid) {
         }
     });
 }
+
+/**
+ * 시험 데이터가 있는 날짜 조회
+ * @param qid
+ */
+function getExamDay(qid) {
+    ajaxRequest({
+        url: '/register/quiz/examnoday/' + qid,
+        successCallback: function(response) {
+            if(response.code != 200) {
+                alert(response.message);
+                return;
+            }
+            $('#examId').empty();
+            $('#examId').append(new Option('선택', 0));
+            $.each(response.data, function(index, item) {
+                $('#examId').append(new Option(item.examday, item.id));
+            });
+        },
+        errorCallback: function(error) {
+            alert('데이터가 없습니다.');
+        }
+    });
+}
+

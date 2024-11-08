@@ -8,6 +8,7 @@ import java.util.List;
 @Setter
 @Getter
 public class QuizRequest {
+    private Long id;    //신규등록이면 null
     private boolean useFlag;
     //private boolean questionImageFlag;
     private boolean choiceImageFlag;
@@ -21,4 +22,5 @@ public class QuizRequest {
 
     // Getters and Setters
 }
+
 

@@ -12,6 +12,7 @@ import kr.giljabi.eip.repository.SubjectRepository;
 import kr.giljabi.eip.service.QuestionService;
 import kr.giljabi.eip.service.ResultsService;
 import kr.giljabi.eip.util.CommonUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
@@ -102,7 +104,7 @@ public class QuestionController {
         }
         // 사용자가 제출한 답변을 처리하고 정답 여부 판단
         String clientUUID = CommonUtils.getCookieValue(request, CommonUtils.UUID_COOKIE_NAME);
-        System.out.println("clientUUID: " + clientUUID);
+        log.info("clientUUID: " + clientUUID);
 
         for (AnswerDTO answer : answerRequest.getAnswers()) {
             Long questionId = Long.valueOf(answer.getId());
@@ -134,13 +136,13 @@ public class QuestionController {
             Results userResult = new Results(clientUUID, questionId, userAnswer,
                     correct, CommonUtils.getClientIp(request), qName.getId());
             resultService.save(userResult);
-            System.out.println("userResult: " + userResult.toString());
+            log.info("userResult: " + userResult.toString());
         }
-        System.out.println(results.toString());
         // 결과를 모델에 추가하여 결과 페이지로 전달
         model.addAttribute("results", results);
         return ResponseEntity.ok(results);
     }
 }
+
 
 

@@ -32,11 +32,11 @@ function checkChoiceImage(isValid) {
         }
     }
 
-    // 유효성 검사: 모든 파일이 있거나 없지 않으면 에러 처리
+/*    // 유효성 검사: 모든 파일이 있거나 없지 않으면 에러 처리
     if (anyFileSelected && !allFilesSelected) {
         alert('모든 이미지 파일을 선택하거나, 모두 선택하지 않아야 합니다.');
         isValid = false;
-    }
+    }*/
     checkChoiceImageFlag = allFilesSelected;
     return isValid;
 }
@@ -126,6 +126,8 @@ $(document).ready(function() {
             }
         } else {
             for (let i = 1; i <= 4; i++) {
+                if($('#question\\.imageUrl' + i).text().trim() !== "")
+                    continue;
                 if ($('#choiceFile' + i).val().trim() === "") {
                     alert(i + '번 선택지 그림을 입력해주세요.');
                     isValid = false;
@@ -141,6 +143,7 @@ $(document).ready(function() {
         } else {
             // JSON 객체 생성
             let jsonData = {
+                id: $('#id').val(),
                 useFlag: $('#useFlag').is(':checked'),
                 //questionImageFlag: $('#questionImageFlag').is(':checked'),
                 choiceImageFlag: $('#choiceImageFlag').is(':checked'),
@@ -166,7 +169,7 @@ $(document).ready(function() {
                 successCallback: function(response) {
                     if(response.code == 200) {
                         alert('문제가 등록되었습니다.');
-                        location.href = '/register/quiz';
+                        location.href = '/register/quiz'; // 다음문제를 연속으로 입력하기 위해 입력창으로 이동
                     } else {
                         alert(response.message);
                         return;
@@ -175,4 +178,9 @@ $(document).ready(function() {
             });
         }
     });
+
+    $('#cancelButton').on('click', function(event) {
+        this.window.close();
+    });
 });
+
