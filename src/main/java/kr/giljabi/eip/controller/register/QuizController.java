@@ -1,5 +1,6 @@
 package kr.giljabi.eip.controller.register;
 
+import io.swagger.v3.oas.annotations.Operation;
 import kr.giljabi.eip.dto.query.ExamnoDayDTO;
 import kr.giljabi.eip.dto.request.QuizRequest;
 import kr.giljabi.eip.dto.response.ChoiceDTO;
@@ -46,12 +47,14 @@ public class QuizController {
 
     }
 
+    @Operation(summary = "퀴즈 등록화면")
     @GetMapping("/quiz")
     public String initQuestion(Model model) {
         initFormData(model);
         return "register/quiz";
     }
 
+    @Operation(summary = "퀴즈 정보 조회")
     @GetMapping("/quiz/{id}")
     public String findQuestion(@PathVariable Long id,  Model model) {
         initFormData(model);
@@ -94,6 +97,7 @@ public class QuizController {
      * @param qid
      * @return
      */
+    @Operation(summary = "자격증에서 시험과목 목록을 리턴")
     @GetMapping("/quiz/qname/{qid}")
     public ResponseEntity<Response<List<Subject>>> getQname(@PathVariable Integer qid) {
         List<Subject> lists = subjectService.findByQidOrderById(qid);
@@ -107,6 +111,7 @@ public class QuizController {
      * @param qid
      * @return
      */
+    @Operation(summary = "퀴즈가 등록된 시험일 목록을 리턴")
     @GetMapping("/quiz/examnoday/{qid}")
     public ResponseEntity<Response<List<ExamnoDayDTO>>> getExamnoDay(@PathVariable Integer qid) {
         List<ExamnoDayDTO> lists = examNoService.getExamnoDay(qid);
@@ -118,6 +123,7 @@ public class QuizController {
      * 신규 등록
      * 예외검증은 생략......
      */
+    @Operation(summary = "퀴즈 저장")
     @PostMapping("/quiz")
     public ResponseEntity<Response<Void>> saveQuestion(
             @RequestPart("jsonData") QuizRequest quizRequest,
@@ -156,6 +162,7 @@ public class QuizController {
 
 
 
+    @Operation(summary = "퀴즈 목록 초기화면으로 이동")
     @GetMapping("/quiz-list")
     public String initQuizList(Model model) {
         initFormData(model);
@@ -170,6 +177,7 @@ public class QuizController {
      * @param name
      * @return
      */
+    @Operation(summary = "자격증종류, 과목에서 퀴즈를 검색")
     @GetMapping("/quiz-list/{qid}/{subjectId}")
     public ResponseEntity<Response<List<QuestionDTO>>> listQuiz(
                 @PathVariable Integer qid, @PathVariable Integer subjectId,

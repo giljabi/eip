@@ -1,5 +1,6 @@
 package kr.giljabi.eip.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import kr.giljabi.eip.dto.request.UserResultDTO;
 import kr.giljabi.eip.service.ResultsService;
 import kr.giljabi.eip.util.CommonUtils;
@@ -22,6 +23,7 @@ public class ResultsController {
         this.resultService = resultService;
     }
 
+    @Operation(summary = "쿠키에 지정된 결과를 리턴")
     @GetMapping("/results/{qid}")
     public String getResultByUuid(@PathVariable Integer qid,
                                   HttpServletRequest request,
@@ -66,3 +68,4 @@ public class ResultsController {
 
  */
 }
+

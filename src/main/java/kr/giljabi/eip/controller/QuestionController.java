@@ -1,5 +1,6 @@
 package kr.giljabi.eip.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import kr.giljabi.eip.dto.request.AnswerDTO;
 import kr.giljabi.eip.dto.request.AnswerRequest;
 import kr.giljabi.eip.dto.response.AnswerCorrectPercentageDto;
@@ -39,6 +40,7 @@ public class QuestionController {
         this.subjectRepository = subjectRepository;
     }
 
+    @Operation(summary = "cookie 생성", description = "발급 후 1년 사용")
     @GetMapping("/generate-uuid")
     public String generateUuid(HttpServletRequest request, HttpServletResponse response) {
         String uuid = CommonUtils.getCookieValue(request, CommonUtils.UUID_COOKIE_NAME);        // UUID 생성
@@ -56,6 +58,7 @@ public class QuestionController {
         return "redirect:/";
     }
 
+    @Operation(summary = "시험과목 목록", description = "정보처리기사 필기:1")
     @GetMapping("/random/{qid}")
     public ResponseEntity<List<Subject>> getSubject(@PathVariable Integer qid,
                              HttpServletRequest request,
@@ -72,6 +75,7 @@ public class QuestionController {
     }
 
 
+    @Operation(summary = "자격증종류, 시험과목에서 랜덤하게 5개 리턴")
     @GetMapping("/random/{qid}/{subjectId}")
     public String getRandomQuestions(@PathVariable Integer qid,
                                      @PathVariable Integer subjectId,
@@ -89,7 +93,7 @@ public class QuestionController {
         return "questions/random";
     }
 
-    // JSON 데이터를 List<AnswerDTO>로 수신
+    @Operation(summary = "문제 정답을 리턴")
     @PostMapping("/submit-answers")
     public ResponseEntity<List<AnswerResult>> submitAnswers(@RequestBody AnswerRequest answerRequest,
                                                             HttpServletRequest request,
