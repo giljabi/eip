@@ -45,13 +45,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/index.html", "/css/**", "/js/**", "/login.html",
-                        "/questions/**", "/user/login").permitAll()
+                        "/questions/**", "/user/login"
+                ).permitAll()
                 // /user/** 경로는 로그인한 사용자만 접근 가능
                 .antMatchers("/user/**", "/register/**").authenticated()
                 .anyRequest().permitAll()
                 .and();
 
-        http
+            http
                 .formLogin()
                         .loginPage("/user/login")
                         .loginProcessingUrl("/authenticate")

@@ -1,7 +1,7 @@
 package kr.giljabi.eip.service;
 
 import kr.giljabi.eip.model.*;
-import kr.giljabi.eip.repository.AnswerRepository;
+//import kr.giljabi.eip.repository.AnswerRepository;
 import kr.giljabi.eip.repository.ChoiceRepository;
 import kr.giljabi.eip.repository.ExamNoRepository;
 import kr.giljabi.eip.repository.QuestionRepository;
@@ -18,17 +18,14 @@ public class QuizLoaderService {
 
     private final QuestionRepository questionRepository;
     private final ChoiceRepository choiceRepository;
-    private final AnswerRepository answerRepository;
     private final ExamNoRepository examNoRepository;
 
     @Autowired
     public QuizLoaderService(QuestionRepository questionRepository,
                              ChoiceRepository choiceRepository,
-                             AnswerRepository answerRepository,
                              ExamNoRepository examNoRepository) {
         this.questionRepository = questionRepository;
         this.choiceRepository = choiceRepository;
-        this.answerRepository = answerRepository;
         this.examNoRepository = examNoRepository;
     }
 
