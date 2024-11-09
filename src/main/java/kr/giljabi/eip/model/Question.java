@@ -59,6 +59,8 @@ public class Question {
     @Column(name="useflag")
     private boolean useFlag;
 
+    private String content;
+
     @ManyToOne
     @JoinColumn(name = "qid", nullable = false)
     private QName qid;
