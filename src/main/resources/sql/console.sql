@@ -31,7 +31,7 @@ CREATE TABLE subject (
     name VARCHAR(255)
 );
 COMMENT ON COLUMN subject.name IS '과목명';
-INSERT INTO public.subject ("name") VALUES
+INSERT INTO subject ("name") VALUES
 	 ('소프트웨어설계'),
 	 ('소프트웨어개발'),
 	 ('데이터베이스구축'),
@@ -44,7 +44,7 @@ CREATE TABLE examyear (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255)
 );
-INSERT INTO public.examyear ("name") VALUES
+INSERT INTO examyear ("name") VALUES
 	 ('2020'),
 	 ('2021'),
 	 ('2022');
@@ -98,7 +98,7 @@ CREATE TABLE choice (
     question_id INT,
     --examno_id INT,
     --question_no INT,
-    no int, 
+    no int,
     name VARCHAR(255),
     imageurl VARCHAR(255),
     CONSTRAINT fk_choice_question FOREIGN KEY (question_id) REFERENCES question(id) -- question의 id 참조
@@ -116,7 +116,7 @@ create table results (
 	question_id int,
 	answer_no int, -- 사용자가 선택한 답
 	correctflag int, -- 1 정답
-	constraint fk_results_question_id foreign key (question_id) references question(id)	
+	constraint fk_results_question_id foreign key (question_id) references question(id)
 );
 create index idx_results_uuid on results(uuid);
 alter table results add column remoteip varchar(40);
