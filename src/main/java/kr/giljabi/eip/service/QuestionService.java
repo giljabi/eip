@@ -175,7 +175,7 @@ public class QuestionService {
                    choices.add(choice);
                }
            }
-           if(!modeFlag) { // 수정이면 기존 선택지 삭제 후 새로 저장
+           if(!modeFlag) { // 수정이면 기존 선택지 삭제 후 새로 저장, choice는 삭제 후 insert
                question.getChoices().clear();
            }
            question.getChoices().addAll(choices);
