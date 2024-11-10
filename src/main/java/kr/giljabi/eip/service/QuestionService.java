@@ -166,7 +166,7 @@ public class QuestionService {
                    }
                    choices.add(choice);
                }
-           } else { // 선택지가 이미지가 아닐 경우
+           } else { // 선택지가 텍스트일 경우
                for (int i = 0; i < quizRequest.getChoices().size(); i++) {
                    Choice choice = new Choice();
                    choice.setNo(i + 1);

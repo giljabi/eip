@@ -75,11 +75,11 @@ $(document).ready(function() {
 // 이벤트 위임 방식으로 클릭 이벤트를 설정
     $('#questionContainer').on('click', '.question-row', function () {
         const id = $(this).data('id');
-        window.open(`/register/quiz/${id}`, 'QuizPopup', 'width=600,height=400,resizable=yes,scrollbars=yes');
+        window.open(`/register/quiz/${id}`, 'QuizPopup', 'width=600,height=800,resizable=yes,scrollbars=yes');
     });
 
     $('#new').on('click', function (event) {
-        window.open(`/register/quiz/`, 'QuizPopup', 'width=600,height=400,resizable=yes,scrollbars=yes');
+        window.open(`/register/quiz/`, 'QuizPopup', 'width=600,height=800,resizable=yes,scrollbars=yes');
     });
 
 });

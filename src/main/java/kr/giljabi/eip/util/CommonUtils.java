@@ -73,6 +73,10 @@ public class CommonUtils {
 
     public static void saveFile(String physicalFilePath, String fileName, MultipartFile file) {
         try {
+            if (physicalFilePath.startsWith("~")) {
+                physicalFilePath = System.getProperty("user.home") + physicalFilePath.substring(1);
+            }
+
             if (file != null && !file.isEmpty()) {
                 String originalFileName = file.getOriginalFilename();
                 if (originalFileName != null && (originalFileName.endsWith(".png") || originalFileName.endsWith(".jpg") || originalFileName.endsWith(".jpeg"))) {
