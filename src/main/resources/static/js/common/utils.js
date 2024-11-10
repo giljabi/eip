@@ -24,9 +24,9 @@ function ajaxRequest({url, method = 'GET',
  * 종목에 포함된 과목을 조회
  * @param qid
  */
-function getQNameByQuid(qid) {
+function getSubjectByQuid(qid) {
     ajaxRequest({
-        url: '/register/quiz/qubject/' + qid,
+        url: '/register/quiz/subject/' + qid,
         successCallback: function(response) {
             if(response.code != 200) {
                 alert(response.message);
