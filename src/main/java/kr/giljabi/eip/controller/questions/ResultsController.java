@@ -1,4 +1,4 @@
-package kr.giljabi.eip.controller;
+package kr.giljabi.eip.controller.questions;
 
 import io.swagger.v3.oas.annotations.Operation;
 import kr.giljabi.eip.dto.request.UserResultDTO;

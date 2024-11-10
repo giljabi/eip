@@ -26,7 +26,7 @@ function ajaxRequest({url, method = 'GET',
  */
 function getQNameByQuid(qid) {
     ajaxRequest({
-        url: '/register/quiz/qname/' + qid,
+        url: '/register/quiz/qubject/' + qid,
         successCallback: function(response) {
             if(response.code != 200) {
                 alert(response.message);

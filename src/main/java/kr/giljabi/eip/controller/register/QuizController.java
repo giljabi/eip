@@ -98,7 +98,7 @@ public class QuizController {
      * @return
      */
     @Operation(summary = "자격증에서 시험과목 목록을 리턴")
-    @GetMapping("/quiz/qname/{qid}")
+    @GetMapping("/quiz/subject/{qid}")
     public ResponseEntity<Response<List<Subject>>> getQname(@PathVariable Integer qid) {
         List<Subject> lists = subjectService.findByQidOrderById(qid);
         Response<List<Subject>> response = ResponseGenerator.success(lists);
