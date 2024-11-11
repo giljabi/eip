@@ -12,7 +12,7 @@ $(document).ready(function() {
 
     $('#qid').on('change', function () {
         let qid = $(this).val();
-        getQNameByQuid(qid);
+        getSubjectByQuid(qid);
         getExamDay(qid);
     });
 

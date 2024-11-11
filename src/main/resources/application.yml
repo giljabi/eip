@@ -1,0 +1,33 @@
+server:
+  port: 8888
+  error:
+    include-message: always
+
+spring:
+  config:
+    activate:
+      on-profile: localpc, localm1, prod
+  thymeleaf:
+    prefix: classpath:templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+  messages:
+    basename: messages/messages
+    encoding: UTF-8
+  session:
+    store-type: jdbc
+    timeout: 1800
+    jdbc:
+      initialize-schema: always
+      schema: classpath:org/springframework/session/jdbc/schema-postgresql.sql
+
+giljabi:
+  question:
+    max: 5
+
+logging:
+  level:
+    com.ulisesbocchio.jasyptspringboot.encryptor.DefaultLazyEncryptor: WARN
+
+

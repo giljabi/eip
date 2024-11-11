@@ -7,7 +7,7 @@
     <property name="LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level ${PID:-}[%15.15thread] %logger{36}.%M : %msg%n"/>
 
     <!-- Local -->
-    <springProfile name="local">
+    <springProfile name="localpc, localm1">
         <logger name="org.springframework.web" level="OFF"/>
         <logger name="org.springframework.security" level="INFO"/>
         <!-- sql로그: info-->
