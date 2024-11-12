@@ -59,7 +59,16 @@ PostgreSQL 17.0 ....
 2.6.1
 ```
 
-# DB ERD
-![img.png](DB-ER.drawio.svg)
+## DB Model
+### ER
+
+
+### Schema & Init Data
+* scehma: src/main/resources/sql/schema.sql
+* initdata: src/main/resources/sql/initdata.sql
+
+
+
+
 
 
