@@ -1,3 +1,15 @@
+
+
+/**
+ *
+ * @param url
+ * @param method
+ * @param data
+ * @param isFormData
+ * @param async
+ * @param successCallback
+ * @param errorCallback
+ */
 function ajaxRequest({url, method = 'GET',
                          data = null,
                          isFormData = false,
@@ -66,4 +78,5 @@ function getExamDay(qid) {
         }
     });
 }
+
 

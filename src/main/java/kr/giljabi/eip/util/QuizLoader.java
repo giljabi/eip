@@ -1,5 +1,5 @@
 package kr.giljabi.eip.util;
-
+/*
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.giljabi.eip.model.*;
@@ -25,6 +25,10 @@ public class QuizLoader {
 
     public QuizLoader(QuizLoaderService quizLoaderService) {
         this.quizLoaderService = quizLoaderService;
+    }
+
+    public List<String> getQuestionList() {
+        return questionList;
     }
 
     public void loadAndInsertData(String filename) {
@@ -171,23 +175,11 @@ public class QuizLoader {
                     lineCounter++;
                     if (line.isEmpty()) continue; // 빈 줄은 무시 (빈 줄이 있을 수 있음
 
-                    if (line.indexOf("###") >= 0) {
+                    if (line.indexOf("###") >= 0) { //시험, 과목ID
                         String[] parts = line.substring(3).split(",");
                         examNoData.id = Integer.parseInt(parts[0].split(":")[1].trim()); // 시험차수ID
                         examNoData.qid = Integer.parseInt(parts[1].split(":")[1].trim()); // 과목ID
-                        //examNoData.id = Integer.parseInt(parts[2].split(":")[1].trim()); // 차수ID
-                        //examNoData.examYearId = Integer.parseInt(parts[1].split(":")[1].trim()); // "시험년도ID:
-                        //examNoData.name = parts[3].split(":")[1].trim();// 차수명
-                        //examNoData.examday = parts[0].trim();//시험일
-                        //examNoData.qid = Long.parseLong(parts[4].split(":")[0].trim()); //시험과목 ID
                         System.out.println("examNoData: " + examNoData.toString());
-
-/*                        examInfo[0] = parts[0].trim();    //시험 실시월
-                        examInfo[1] = parts[1].split(":")[1].trim(); // "시험년도ID:
-                        examInfo[2] = parts[2].split(":")[1].trim(); // 차수ID
-                        examInfo[3] = parts[3].split(":")[1].trim(); // 차수명
-                        examInfo[4] = parts[4].split(":")[0].trim(); // 시험명
-                        System.out.println("examInfo: " + examNoData.toString());*/
                         lineCounter = 0;
                         continue;
                     }
@@ -238,22 +230,28 @@ public class QuizLoader {
     public class ExamNoData {
         public Integer id;          //examno.id
         public Integer qid;         //시험과목 ID
-//        public Integer examYearId;  //examyear.id
-//        public String name;         //examno.name
-//        public String examday;      //examno.examday
-
         public ExamNoData() {
         }
     }
 
-/*
-    public static void main(String[] args) {
-        kr.giljabi.eip.QuizLoader loader = new kr.giljabi.eip.QuizLoader();
-        loader.loadQuestions("data.txt");
-        loader.printQuestionsAndChoices();
-    }*/
+//    public class Question {
+//        public String question;
+//        public List<Choice> choices;
+//        public String answer;
+//        public boolean qif;
+//        public String questionImageUrl;
+//        public boolean cif;
+//    }
+//
+//    public class Choice {
+//        public int no;
+//        public String choice;
+//        public String choiceImageUrl;
+//    }
+
 }
 
+*/
 
 
 

@@ -1,5 +1,5 @@
 package kr.giljabi.eip;
-
+/*
 import kr.giljabi.eip.util.QuizLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -22,9 +22,9 @@ public class QuizApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-/*        quizLoader.loadAndInsertData("data/20200606.txt");
-        Thread.sleep(1000 * 1);*/
-/*        quizLoader.loadAndInsertData("data/20200822.txt");
+        quizLoader.loadAndInsertData("data/20200606.txt");
+        Thread.sleep(1000 * 1);
+        quizLoader.loadAndInsertData("data/20200822.txt");
         Thread.sleep(1000 * 1);
         quizLoader.loadAndInsertData("data/20200926.txt");
         Thread.sleep(1000 * 1);
@@ -36,14 +36,14 @@ public class QuizApplication implements CommandLineRunner {
         Thread.sleep(1000 * 1);
         quizLoader.loadAndInsertData("data/20220305.txt");
         Thread.sleep(1000 * 1);
-        quizLoader.loadAndInsertData("data/20220424.txt");*/
-/*        quizLoader.loadAndInsertData("data/20220702.txt");
+        quizLoader.loadAndInsertData("data/20220424.txt");
+        quizLoader.loadAndInsertData("data/20220702.txt");
         Thread.sleep(1000 * 1);
         quizLoader.loadAndInsertData("data/20230213.txt");
         Thread.sleep(1000 * 1);
         quizLoader.loadAndInsertData("data/20230513.txt");
-        Thread.sleep(1000 * 1);*/
+        Thread.sleep(1000 * 1);
 
     }
 }
-
+*/

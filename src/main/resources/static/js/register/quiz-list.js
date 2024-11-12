@@ -82,4 +82,9 @@ $(document).ready(function() {
         window.open(`/register/quiz/`, 'QuizPopup', 'width=600,height=800,resizable=yes,scrollbars=yes');
     });
 
+    $('#loader').on('click', function (event) {
+        window.open('/register/quizloader', 'QuizPopup', 'width=800,height=800,resizable=yes,scrollbars=yes');
+    });
+
 });
+

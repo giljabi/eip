@@ -34,10 +34,12 @@ public class QuizLoaderService {
         return questionRepository.save(question);
     }
 
+    @Transactional
     public int  deleteAllByQuestionExamNoAndQid(ExamNo examNo, QName qname) {
         return questionRepository.deleteAllByExamNoAndQid(examNo, qname);
     }
 
+    @Transactional
     public int deleteAllChoiceExamNoIdAndQid(Integer examNoId, Integer qid) {
         return choiceRepository.deleteByExamNoIdAndQid(examNoId, qid);
     }
@@ -65,4 +67,5 @@ public class QuizLoaderService {
     }
 
 }
+
 

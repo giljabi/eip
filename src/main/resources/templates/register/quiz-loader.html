@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery 사용 -->
+    <script src="/js/common/utils.js"></script>
+    <script src="/js/register/quiz-loader.js"></script> <!-- JavaScript 파일 추가 -->
+    <style>
+        #adOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            z-index: 1000;
+            text-align: center;
+        }
+        #adOverlay h1 {
+            margin-top: 20%;
+            font-size: 3rem;
+        }
+
+    </style>
+</head>
+
+<body>
+<input type="file" id="fileInput" style="display: none;" />
+
+<div class="container-fluid px-3 px-md-5">
+    <h1 class="text-center mt-5">Quiz Loader</h1>
+    <div class="d-flex justify-content-between mt-3 mb-5 w-100">
+        <button type="submit" id="fileOpenButton" class="btn btn-primary w-50 me-2">파일</button>
+        <button type="submit" id="writeButton" class="btn btn-primary w-50 ms-2">저장</button>
+    </div>
+    <div id="message"></div>
+    <div class="table-responsive mt-3">
+        <table class="table table-striped table-bordered">
+            <thead class="table-light">
+            <tr>
+                <th>문제</th>
+                <th>이미지</th>
+                <th>선택지</th>
+                <th>이미지</th>
+                <th>정답</th>
+            </tr>
+            </thead>
+            <tbody id="questionsTableBody"></tbody>
+        </table>
+    </div>
+    <button type="submit" id="closeButton" class="btn btn-primary mt-3 mb-5 w-100" onclick="window.close();">창닫기</button>
+</div>
+
+<div id="adOverlay">
+    <h1>데이터 처리중입니다.</h1>
+    <p>Your results will appear shortly...</p>
+</div>
+</body>
+</html>
+
+
