@@ -6,7 +6,7 @@ server:
 spring:
   config:
     activate:
-      on-profile: localpc, localm1, prod
+      on-profile: localpc, localmac, prod
   thymeleaf:
     prefix: classpath:templates/
     suffix: .html
