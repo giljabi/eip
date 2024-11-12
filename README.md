@@ -11,15 +11,15 @@ id: admin@admin.com
 password: qweqwe123
 ```
 
-### 관리자 기능
-* 문제 배치등록
+## 관리자 기능
+### 문제 배치등록
   * 화면 캡처...
-  * 
-* 데이터 파일 구조
+
+### 데이터 파일 구조
   * 기출문제는 보통 pdf로 구할 수 있으며, pdf를 text로 변환하여 문제를 등록할 수 있도록 함
   * sample code : python/exam.py
   * pdf파일 변환 SW를 사용해도 완벽하게 되지 않으므로 아래와 같은 형식으로 완성해야 함
-  * {{qif:0,cif:1}}: qif: 질문지에 이미지가 있는 경우, cif: 선택지가 이미지인 경우를 구분
+  * {{qif:0,cif:1}}: qif: 질문지에 이미지가 있는(1:true) 경우 question.questionimageflag에 true 저장, cif: 선택지가 이미지인 경우(1:true)를 구분해서 question.choiceimageflag에 true 저장하고, 이미지 경로를 imageurl에 함께 저장
   * 문제당 5줄, 문제 1줄, 선택 4줄로 항상 구성해야 함
   * 이미지 파일은 별도 문제수정 화면에서 개별로 저장해야 함
 ```text
@@ -54,10 +54,10 @@ correct 4312244332
 correct 4423334313
 ```
 
-* 문제 수정/등록
+### 문제 수정/등록
   * 화면캡처...
 
-### 배치사용
+
 
 ## 2. 문제풀이
 ### url: /
