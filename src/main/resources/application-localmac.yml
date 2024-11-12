@@ -5,9 +5,9 @@ spring:
 #    username: hello
 #    password: world
     # 암호화를 하지 않는 다면 jasypt-spring-boot-starter 삭제
-    url: ENC(fsRjMwqB/bYnoFNTU9exZVjqexLricar65r7QZFjUuJr61sDB1Wk1OYi6TST/LMKzgbC21L9BBz4CmyB6+sVRBlkZkAAdGAroSl/6v228+W6CV9u6tO5hg==)
-    username: ENC(Q/GakeXL3tdR3n0gK2wqXg==)
-    password: ENC(LuPJiCui2FYMRyFgO8xc/RjQHnJ+lIrv)
+    url: ENC(6kRPPO7QPsSUOLVEBGtJnLkrd48bhRnNzZpz8KVj4u9OLA0750yoXSxRsrNqOGtXsmZzqds8d3ghdmFyPLTXmLtwwb3DouVX4Rpe4KQx40GoSjKSbi/lCg==)
+    username: ENC(wGnxmHJJOZh8UssghkX1E/E03+LTg17G)
+    password: ENC(zm4ui4DqkwkkpuZBYOlmvHT+dQqLE+sQ4jN3G9rXveg=)
     hikari:
       maximum-pool-size: 50
       minimum-idle: 15
