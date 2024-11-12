@@ -3,6 +3,31 @@
 * 각 자격증 시험 문제를 관리, 풀이할 수 있는 프로젝트
 * http://3.37.253.88:8888/
 
+## build & run
+```shell
+mvn clean package -DskipTests
+```
+
+### 암호화
+* yml에 있는 암호화키를 설정해야 함, 암호화는 JasyptEncryptionExample.java 참고
+* run.sh
+```shell
+#!/bin/sh
+APP_NAME=eip-1.0.jar
+
+PID=$(ps -ef | grep $APP_NAME | grep -v grep | awk '{print $2}')
+if [ -z "$PID" ]; then
+    echo "Application is not running."
+else
+    echo "Killing application with PID: $PID"
+    kill -9 $PID
+    echo "Application terminated."
+fi
+
+echo "Start EIP application"
+nohup /usr/lib/jvm/java-8-openjdk-amd64/bin/java -jar -Dspring.profiles.active=prod -Xms256m -Xmx256m -Djava.net.preferIPv4Stack=true -Duser.timezone=Asia/Seoul -Djasypt.encryptor.password=암호화키 $APP_NAME > /dev/null 2>&1 &
+```
+
 ## 1. 로그인
 * 문제 등록기능으로 운영자만 사용
 ### url: /usr/login
@@ -55,12 +80,18 @@ correct 4423334313
 ```
 
 ### 문제 수정/등록
-  * 화면캡처...
-
+  * 문제 관리는 로그인 후 사용
+  * id: admin@admin.com, pass: qweqwe123
+    ![img_2.png](docs/login.png)
+    ![img_4.png](docs/question_list.png)
+    ![img_1.png](docs/quiz-edit.png)
 
 
 ## 2. 문제풀이
 ### url: /
+![img_1.png](docs/quiz.png)
+
+
 ```text
 최초 접속시 서버에서 cookie를 만들어 접속한 사용자를 구분
 ```
@@ -74,14 +105,9 @@ correct 4423334313
 
 ## 3. 풀이결과
 ### url: /questions/results/1
+* 시험종목: 정보처리기사(1)
 * 쿠키로 구분된 사용자의 풀이 결과
-
-| 과목             | 도전 문항수 | 정답수 | 정답율 |
-|------------------|-------------|--------|--------|
-| 소프트웨어개발    | 1           | 1      | 100.0% |
-| 데이터베이스구축  | 1           | 1      | 100.0% |
-| 프로그래밍언어활용 | 1           | 0      | 0.0%   |
-| 정보시스템구축관리 | 2           | 1      | 50.0%  |
+![img.png](result.png)
 
 
 # 개발환경
@@ -106,7 +132,7 @@ PostgreSQL 17.0 ....
 
 ## DB Model
 ### ER
-
+![img_1.png](docs/db-er.png)
 
 ### Schema & Init Data
 * scehma: src/main/resources/sql/schema.sql
