@@ -107,7 +107,7 @@ correct 4423334313
 ### url: /questions/results/1
 * 시험종목: 정보처리기사(1)
 * 쿠키로 구분된 사용자의 풀이 결과
-![img.png](result.png)
+![img.png](docs/result.png)
 
 
 # 개발환경
