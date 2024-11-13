@@ -64,7 +64,7 @@ public class QuestionController {
                              HttpServletRequest request,
                              Model model) {
         //uuid cookie가 없으면 첫화면부터 시작하게 한다.
-        String uuid = CommonUtils.getCookieValue(request, CommonUtils.UUID_COOKIE_NAME);        // UUID 생성
+        String uuid = CommonUtils.getCookieValue(request, CommonUtils.UUID_COOKIE_NAME);
         if (uuid == null) {
             model.addAttribute("results", null);
             return ResponseEntity.ok(null);
@@ -81,8 +81,7 @@ public class QuestionController {
                                      @PathVariable Integer subjectId,
                                      HttpServletRequest request,
                                      Model model) {
-        //uuid cookie가 없으면 첫화면부터 시작하게 한다.
-        String uuid = CommonUtils.getCookieValue(request, CommonUtils.UUID_COOKIE_NAME);        // UUID 생성
+        String uuid = CommonUtils.getCookieValue(request, CommonUtils.UUID_COOKIE_NAME);
         if (uuid == null) {
             model.addAttribute("results", null);
             return "redirect:/";
@@ -100,8 +99,7 @@ public class QuestionController {
                                                             Model model) {
         List<AnswerResult> results = new ArrayList<AnswerResult>();
 
-        //uuid cookie가 없으면 첫화면부터 시작하게 한다.
-        String uuid = CommonUtils.getCookieValue(request, CommonUtils.UUID_COOKIE_NAME);        // UUID 생성
+        String uuid = CommonUtils.getCookieValue(request, CommonUtils.UUID_COOKIE_NAME);
         if (uuid == null) {
             model.addAttribute("results", null);
             return ResponseEntity.ok(results);
