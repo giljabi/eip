@@ -4,10 +4,8 @@
 * Demo: http://3.37.253.88:8888/
 
 # Swagger
-* 전체 컨트롤러 확인
-
+* 전체 컨트롤러를 확인
 ![img.png](docs/swagger.png)
-
 
 ## build & run
 ### database
@@ -68,7 +66,7 @@ password: qweqwe123
   * 이미지 파일은 별도 문제수정 화면에서 개별로 저장해야 함
 
 #### Line 1: 시험정보
-* ExamNO: examno 테이블에 있는 ID
+* ExamNO(시험차수): examno 테이블에 있는 ID
 * 과목ID: subject 테이블에 있는 ID
 ```text
 ### ExamNO:8, 과목ID:2
@@ -81,8 +79,13 @@ password: qweqwe123
   question.imageurl에 이미지 경로(/images/q/2022/{id}.png)를 저장하므로 이미지 부분만 작성 후 복사
 * cif:1, 배치 등록시 choice.imageurl에 이미지 경로(/images/q/2022/{id}-{no}.png)를 저장
   이미지는 작성 후 이미지 경로에 복사
+* 이미지 경로와 파일명은 question(where qiq=과목ID and questionimageflag=true and examno_id=차수ID)
+  chocie 테이블은 question와 join해서 선택지 이미지 경로와 파일명을 확인할 수 있음
+
 ![img.png](docs/question_choice.png)
-* 최종 배치 데이터
+
+
+* 최종 배치 데이터(항상 5줄 유지해야 함)
 ```text
 {{qif:1,cif:1}}13. 그림과 같이 점 O를 중심으로 반지름이 a(m)인 구도체 1과 안쪽 반지름이 b(m)이고 바깥쪽 반지름이 C(m)인 구도체 2가 있다. 이 도체계에서 전위계수 P11(1/F)에 해당하는 것은?
 	1
