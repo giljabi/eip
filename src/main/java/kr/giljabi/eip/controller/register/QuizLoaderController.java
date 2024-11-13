@@ -84,7 +84,7 @@ correct 4423334313
         model.addAttribute("results", null);
         return "register/quiz-loader";
     }
-    @Operation(summary = "문제 파일 내용확인, 파일 경로는 data/filename.txt로 존재해야 함")
+    @Operation(summary = "문제 파일 내용확인, 파일 내용이 맞는지 확인하는 절차는 없음")
     @PostMapping("/quizloader")
     public ResponseEntity<Response<List<QuestionObject>>>  quizLoader(
             @RequestParam(value = "formData") MultipartFile formData) {
@@ -93,7 +93,7 @@ correct 4423334313
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "문제 파일 DB Insert, 파일 경로는 data/filename.txt로 존재해야 함")
+    @Operation(summary = "문제 파일 DB Insert, 파일 내용이 맞는지 확인하는 절차는 없음")
     @PostMapping("/quizloader/save")
     public ResponseEntity<Response<Void>> quizInsert(
             @RequestParam(value = "formData") MultipartFile formData
@@ -329,4 +329,5 @@ correct 4423334313
         }
     }
 }
+
 
