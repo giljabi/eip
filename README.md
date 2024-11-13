@@ -78,20 +78,21 @@ password: qweqwe123
 * 아래 이미지와 같은 문제는 
   qif:1, 배치 등록시 question.questionimageflag, question.choiceimageflag에 true 저장
   question.imageurl에 이미지 경로(/images/q/2022/{id}.png)를 저장하므로 이미지 부분만 작성 후 복사
-* cif:1, 배치 등록시 choice.imageurl에 이미지 경로(/images/q/2022/{id}-{no}.png)를 저장되므로, 이미지는 작성 후 이미지 경로에 복사
 ```sql
 select no, name, imageurl, questionimageflag, choiceimageflag
 from question
 ```
-  ![img.png](docs/select-question.png)
-* 이미지 경로와 파일명은 question(where qiq=과목ID and questionimageflag=true and examno_id=차수ID)
-  chocie 테이블은 question와 join해서 선택지 이미지 경로와 파일명을 확인할 수 있음
+![img.png](docs/select-question.png)
+* cif:1, 배치 등록시 choice.imageurl에 이미지 경로(/images/q/2022/{id}-{no}.png)를 저장되므로, 이미지는 작성 후 이미지 경로에 복사
 ```sql
 select b.id, b.no, b.name, b.imageurl
 from question a, choice b
 where a.id=b.question_id
 ```
 ![img.png](docs/select-choice.png)
+
+* 이미지 경로와 파일명은 question(where qiq=과목ID and questionimageflag=true and examno_id=차수ID)
+  chocie 테이블은 question와 join해서 선택지 이미지 경로와 파일명을 확인할 수 있음
 
 
 ![img.png](docs/question_choice.png)
@@ -156,6 +157,7 @@ correct 4423334313
 ## 4. DB Model
 ### ER
 <img src="docs/db-er.png" width="800px"></img><br/>
+
 
 
 
