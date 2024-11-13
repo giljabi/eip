@@ -1,15 +1,28 @@
 
 # My Quiz...
 * 각 자격증 시험 문제를 관리, 풀이할 수 있는 프로젝트
-* http://3.37.253.88:8888/
+* Demo: http://3.37.253.88:8888/
 
 ## build & run
+### database
+* postgresql db 생성
+```sql
+CREATE USER mydbuser WITH password 'mydbuser';
+CREATE DATABASE eipdatabase OWNER mydbuser ENCODING 'UTF8'; 
+```
+
+* schema & init data
+  * schema: src/main/resources/sql/schema.sql
+  * initdata: src/main/resources/sql/initdata.sql
+
+### build 
 ```shell
 mvn clean package -DskipTests
 ```
 
-### 암호화
-* yml에 있는 암호화키를 설정해야 함, 암호화는 JasyptEncryptionExample.java 참고
+### run
+* 민감정보 암호화를 하는 경우, JasyptEncryptionExample.java 참고해서 위에서 만든 사용자, 비밀번호, URL을 암호화하고 암호화키를 run.sh에 추가
+```shell
 * run.sh
 ```shell
 #!/bin/sh
@@ -36,7 +49,7 @@ id: admin@admin.com
 password: qweqwe123
 ```
 
-## 관리자 기능
+## 2. 관리자 기능
 ### 문제 배치등록
   * 화면 캡처...
 
@@ -87,7 +100,7 @@ correct 4423334313
     ![img_1.png](docs/quiz-edit.png)
 
 
-## 2. 문제풀이
+## 3. 문제풀이
 ### url: /
 ![img_1.png](docs/quiz.png)
 
@@ -110,33 +123,9 @@ correct 4423334313
 ![img.png](docs/result.png)
 
 
-# 개발환경
-* PC or MAC
-* IntelliJ IDEA
-
-### Database
-```
-select version();
-PostgreSQL 17.0 ....
-```
-
-### JDK
-```text
-1.8
-```
-
-### Spring Boot
-```text
-2.6.1
-```
-
-## DB Model
+## 4. DB Model
 ### ER
 ![img_1.png](docs/db-er.png)
-
-### Schema & Init Data
-* scehma: src/main/resources/sql/schema.sql
-* initdata: src/main/resources/sql/initdata.sql
 
 
 
