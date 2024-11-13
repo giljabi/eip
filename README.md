@@ -3,6 +3,17 @@
 * 각 자격증 시험 문제를 관리, 풀이할 수 있는 프로젝트
 * Demo: http://localhost:8888/
 
+![img.png](docs/random-quiz.png)
+
+* 정답확인
+
+![img.png](docs/check-quiz.png)
+
+* 결과확인
+
+![img.png](docs/result.png)
+
+
 # Swagger
 * 전체 컨트롤러를 확인
 
@@ -132,6 +143,7 @@ correct 4423334313
 
 ## 3. 문제풀이
 ### url: /
+
 ![img_1.png](docs/quiz.png)
 
 
