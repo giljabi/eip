@@ -51,35 +51,42 @@ password: qweqwe123
 
 ## 2. 관리자 기능
 ### 문제 배치등록
-  * 화면 캡처...
+  * QuizLoaderController.java에서 파일을 읽어서 문제를 등록
 
-### 데이터 파일 구조
+#### 데이터 파일 구조
   * 기출문제는 보통 pdf로 구할 수 있으며, pdf를 text로 변환하여 문제를 등록할 수 있도록 함
   * sample code : python/exam.py
   * pdf파일 변환 SW를 사용해도 완벽하게 되지 않으므로 아래와 같은 형식으로 완성해야 함
   * {{qif:0,cif:1}}: qif: 질문지에 이미지가 있는(1:true) 경우 question.questionimageflag에 true 저장, cif: 선택지가 이미지인 경우(1:true)를 구분해서 question.choiceimageflag에 true 저장하고, 이미지 경로를 imageurl에 함께 저장
   * 문제당 5줄, 문제 1줄, 선택 4줄로 항상 구성해야 함
   * 이미지 파일은 별도 문제수정 화면에서 개별로 저장해야 함
-```text
-### ExamNO:8, 과목ID:2, --뒷 부분은 설명, 차수ID: table ExamNo(8) 참고, 과목:전기기사(2) 
-1. εr = 81, μr = 1 인 매질의 고유 임피던스는 약 몇 Ω 인가? (단, εr은 비유전율이고 , μr은 비투자율이다.)
-	1 13.9 
-	2 21.9
-	3 33.9 
-	4 41.9
-2. 강자성체의 B-H 곡선을 자세히 관찰하면 매끈한 곡선이 아니라 자속밀도가 어느 순간 급격히 계단적으로 증가 또는 감소하는 것을 알 수 있다. 이러한 현상을 무엇이라 하는가 ?
-	1 퀴리점 (Curie point)
-	2 자왜현상 (Magneto-striction)
-	3 바크하우젠 효과(Barkhausen effect)
-	4 자기여자 효과(Magnetic after effect)
-{{qif:0,cif:1}}3. 진공 중에 무한 평면도체와 d(m)만큼 떨어진 곳에 선전하밀도 λ(C/m) 의 무한 직선도체가 평행하게 놓여 있는 경우 직선 도체의 단위 길이당 받는 힘은 몇 N/m 인가?
-...
 
-100. 과전류차단기로 저압전로에 사용하는 범용의 퓨즈(용품 및 생활용품 안전관리법 」에서 규정하는 것을 제외한다)의 정격전류가 16A인 경우 용단전류는 정격전류의 몇 배인가 ? (단, 퓨즈(gG)인 경우이다.)
-	1 1.25 
-	2 1.5
-	3 1.6 
-	4 1.9
+#### Line 1: 시험정보
+* ExamNO: examno 테이블에 있는 ID
+* 과목ID: subject 테이블에 있는 ID
+```text
+### ExamNO:8, 과목ID:2
+```
+
+#### Line 2~501: 질문, 선택지 정보는 5줄로 구성
+* {{qif:0,cif:1}} : 질문에 이미지 유무(qif), 선택지에 이미지 유무(cif)를 구분, 이미지가 없으면 생략
+* 아래 이미지와 같은 문제는 
+  qif:1, 배치 등록시 question.questionimageflag, question.choiceimageflag에 true 저장
+  question.imageurl에 이미지 경로(/images/q/2022/{id}.png)를 저장하므로 이미지 부분만 작성 후 복사
+* cif:1, 배치 등록시 choice.imageurl에 이미지 경로(/images/q/2022/{id}-{no}.png)를 저장
+  이미지는 작성 후 이미지 경로에 복사
+![img.png](docs/question_choice.png)
+* 최종 배치 데이터
+```text
+{{qif:1,cif:1}}13. 그림과 같이 점 O를 중심으로 반지름이 a(m)인 구도체 1과 안쪽 반지름이 b(m)이고 바깥쪽 반지름이 C(m)인 구도체 2가 있다. 이 도체계에서 전위계수 P11(1/F)에 해당하는 것은?
+	1
+	2
+	3
+	4
+```
+#### Line 502~511: 정답
+* 정답은 10줄로 구성하며 시작에 correct를 붙임
+```text
 correct 4332314241
 correct 1343411142
 correct 3242234241
@@ -95,9 +102,10 @@ correct 4423334313
 ### 문제 수정/등록
   * 문제 관리는 로그인 후 사용
   * id: admin@admin.com, pass: qweqwe123
-    ![img_2.png](docs/login.png)
-    ![img_4.png](docs/question_list.png)
-    ![img_1.png](docs/quiz-edit.png)
+
+![img_2.png](docs/login.png)
+![img_4.png](docs/question_list.png)
+![img_1.png](docs/quiz-edit.png)
 
 
 ## 3. 문제풀이
@@ -120,14 +128,13 @@ correct 4423334313
 ### url: /questions/results/1
 * 시험종목: 정보처리기사(1)
 * 쿠키로 구분된 사용자의 풀이 결과
+
 ![img.png](docs/result.png)
 
 
 ## 4. DB Model
 ### ER
-![img_1.png](docs/db-er.png)
-
-
+<img src="docs/db-er.png" width="800px"></img><br/>
 
 
 
