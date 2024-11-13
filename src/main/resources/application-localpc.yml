@@ -1,9 +1,6 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-#    url: jdbc:postgresql://localhost:5432/helloworlddb?currentSchema=public&useSSL=false
-#    username: hello
-#    password: world
     # 암호화를 하지 않는 다면 jasypt-spring-boot-starter 삭제
     url: ENC(AeEAxdmTq6iYx0G331ReAgPOM2RKij10TBq0y+uUij9EkvY3LkknbMpg3acrSJpg7zIVB2PZ151yLrg7cJUeKSpTurSXF2z1/U1LZdNdY1F1JAP3rn07ng==)
     username: ENC(55grEQB38P24miO+vosUiA==)
