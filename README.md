@@ -5,6 +5,7 @@
 
 # Swagger
 * 전체 컨트롤러를 확인
+
 ![img.png](docs/swagger.png)
 
 ## build & run
@@ -25,7 +26,7 @@ mvn clean package -DskipTests
 ```
 
 ### run
-* 민감정보 암호화를 하는 경우, JasyptEncryptionExample.java 참고해서 위에서 만든 사용자, 비밀번호, URL을 암호화하고 암호화키를 run.sh에 추가
+* 민감정보 암호화를 하는 경우, [JasyptEncryptionExample.java](src/main/java/kr/giljabi/eip/util/JasyptEncryptionExample.java) 참고해서 위에서 만든 사용자, 비밀번호, URL을 암호화하고 암호화키를 run.sh에 추가
 ```shell
 * run.sh
 ```shell
@@ -155,6 +156,7 @@ correct 4423334313
 ## 4. DB Model
 ### ER
 <img src="docs/db-er.png" width="800px"></img><br/>
+
 
 
 
