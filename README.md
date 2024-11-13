@@ -3,6 +3,12 @@
 * 각 자격증 시험 문제를 관리, 풀이할 수 있는 프로젝트
 * Demo: http://3.37.253.88:8888/
 
+# Swagger
+* 전체 컨트롤러 확인
+
+![img.png](docs/swagger.png)
+
+
 ## build & run
 ### database
 * postgresql db 생성
@@ -12,8 +18,8 @@ CREATE DATABASE eipdatabase OWNER mydbuser ENCODING 'UTF8';
 ```
 
 * schema & init data
-  * schema: src/main/resources/sql/schema.sql
-  * initdata: src/main/resources/sql/initdata.sql
+  * [schema.sql](src/main/resources/sql/schema.sql)
+  * [initdata.sql](src/main/resources/sql/initdata.sql)
 
 ### build 
 ```shell
@@ -51,7 +57,7 @@ password: qweqwe123
 
 ## 2. 관리자 기능
 ### 문제 배치등록
-  * QuizLoaderController.java에서 파일을 읽어서 문제를 등록
+  * [QuizLoaderController.java](src/main/java/kr/giljabi/eip/controller/register/QuizLoaderController.java)에서 파일을 읽어서 문제를 등록
 
 #### 데이터 파일 구조
   * 기출문제는 보통 pdf로 구할 수 있으며, pdf를 text로 변환하여 문제를 등록할 수 있도록 함
