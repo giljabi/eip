@@ -84,6 +84,7 @@ correct 4423334313
         model.addAttribute("results", null);
         return "register/quiz-loader";
     }
+
     @Operation(summary = "문제 파일 내용확인, 파일 내용이 맞는지 확인하는 절차는 없음")
     @PostMapping("/quizloader")
     public ResponseEntity<Response<List<QuestionObject>>>  quizLoader(
@@ -98,7 +99,7 @@ correct 4423334313
     public ResponseEntity<Response<Void>> quizInsert(
             @RequestParam(value = "formData") MultipartFile formData
     ) {
-        System.out.println("formData: " + formData.getOriginalFilename());
+        log.info("formData: " + formData.getOriginalFilename());
         List<QuestionObject> questionList = loadQuestions(formData);
         insertData(questionList);
         Response<Void> response = ResponseGenerator.success(null);
