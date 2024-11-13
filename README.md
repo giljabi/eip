@@ -1,7 +1,7 @@
 
 # My Quiz...
 * 각 자격증 시험 문제를 관리, 풀이할 수 있는 프로젝트
-* Demo: http://3.37.253.88:8888/
+* Demo: http://localhost:8888/
 
 # Swagger
 * 전체 컨트롤러를 확인
