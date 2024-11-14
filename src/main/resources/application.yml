@@ -2,6 +2,8 @@ server:
   port: 8888
   error:
     include-message: always
+  servlet:
+    context-path: /eip
 
 spring:
   config:

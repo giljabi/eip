@@ -22,7 +22,7 @@ spring:
 
 giljabi:
   eip:
-    filePath: /git/giljabi/eip/images/
+    filePath: x:/git/giljabi/eip/images/
   doc:
     version: 1.0.0
 

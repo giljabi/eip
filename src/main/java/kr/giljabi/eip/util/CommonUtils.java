@@ -81,17 +81,25 @@ public class CommonUtils {
                 String originalFileName = file.getOriginalFilename();
                 if (originalFileName != null && (originalFileName.endsWith(".png") || originalFileName.endsWith(".jpg") || originalFileName.endsWith(".jpeg"))) {
                     Path uploadPath = Paths.get(physicalFilePath);
+
                     if (!Files.exists(uploadPath)) {
                         Files.createDirectories(uploadPath);
+                        log.info("Directory created: " + uploadPath.toString());
                     }
+
                     Path path = uploadPath.resolve(fileName);
                     file.transferTo(path.toFile());
-                    log.info("file saved: {}", path.toString());
+                    log.info("File saved: " + path.toString());
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.info("file save error: IOException {}", e.getMessage());
+            //e.printStackTrace();
+        } catch (Exception e) {
+            log.info("file save error: Exception {}", e.getMessage());
+            //e.printStackTrace();
         }
     }
 
 }
+

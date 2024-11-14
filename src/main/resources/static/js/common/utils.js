@@ -1,5 +1,8 @@
 
+const gContextName = window.location.pathname.split('/')[1];
+const gContextPath = gContextName ? '/' + gContextName : '';
 
+const EIPclientUUID = 'EIPclientUUID';
 /**
  *
  * @param url
@@ -38,7 +41,7 @@ function ajaxRequest({url, method = 'GET',
  */
 function getSubjectByQuid(qid) {
     ajaxRequest({
-        url: '/register/quiz/subject/' + qid,
+        url: gContextPath + '/register/quiz/subject/' + qid,
         successCallback: function(response) {
             if(response.code != 200) {
                 alert(response.message);
@@ -61,7 +64,7 @@ function getSubjectByQuid(qid) {
  */
 function getExamDay(qid) {
     ajaxRequest({
-        url: '/register/quiz/examnoday/' + qid,
+        url: gContextPath + '/register/quiz/examnoday/' + qid,
         successCallback: function(response) {
             if(response.code != 200) {
                 alert(response.message);
@@ -78,5 +81,6 @@ function getExamDay(qid) {
         }
     });
 }
+
 
 

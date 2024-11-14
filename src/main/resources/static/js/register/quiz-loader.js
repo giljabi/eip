@@ -12,7 +12,7 @@ $(document).ready(function () {
 
         $('#adOverlay').fadeIn();
         ajaxRequest({
-            url: '/register/quizloader/save',
+            url: gContextPath + '/register/quizloader/save',
             data: formData,
             isFormData: true,
             async: true,
@@ -43,7 +43,7 @@ $(document).ready(function () {
 
             $('#adOverlay').fadeIn();
             ajaxRequest({
-                url: '/register/quizloader',
+                url: gContextPath + '/register/quizloader',
                 data: formData,
                 isFormData: true,
                 method: 'POST',
@@ -79,4 +79,5 @@ $(document).ready(function () {
     });
 
 });
+
 

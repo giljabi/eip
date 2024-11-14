@@ -44,17 +44,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                         .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/index.html", "/css/**", "/js/**", "/login.html",
-                        "/questions/**", "/user/login"
-                ).permitAll()
-                // /user/** 경로는 로그인한 사용자만 접근 가능
-                .antMatchers("/user/**", "/register/**").authenticated()
+                .antMatchers("/index", "/login", "/css/**", "/js/**", "/questions/**").permitAll()
+                // 로그인한 사용자만 접근 가능
+                .antMatchers("/register/**").authenticated()
                 .anyRequest().permitAll()
                 .and();
 
             http
                 .formLogin()
-                        .loginPage("/user/login")
+                        .loginPage("/login")
                         .loginProcessingUrl("/authenticate")
                         .successHandler(this.loginSuccessHandler)
                         .failureHandler(this.loginFailureHandler)
@@ -65,7 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/user/login")
+                .logoutSuccessUrl("/login")
                 .invalidateHttpSession(true)
                 .permitAll();
     }
@@ -75,3 +73,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
         }
 }
+

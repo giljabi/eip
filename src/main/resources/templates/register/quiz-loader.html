@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery 사용 -->
-    <script src="/js/common/utils.js"></script>
-    <script src="/js/register/quiz-loader.js"></script> <!-- JavaScript 파일 추가 -->
+    <script th:src="@{/js/common/utils.js}"></script>
+    <script th:src="@{/js/register/quiz-loader.js}"></script> <!-- JavaScript 파일 추가 -->
     <style>
         #adOverlay {
             display: none;
@@ -63,5 +63,6 @@
 </div>
 </body>
 </html>
+
 
 
