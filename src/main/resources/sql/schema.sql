@@ -98,7 +98,7 @@ CREATE TABLE results (
                          qid int4 NULL
 );
 CREATE INDEX idx_results_uuid ON results USING btree (uuid);
-ALTER TABLE results ADD CONSTRAINT fk_results_question_id FOREIGN KEY (question_id) REFERENCES public.question(id);
+ALTER TABLE results ADD CONSTRAINT fk_results_question_id FOREIGN KEY (question_id) REFERENCES question(id);
 
 
 
