@@ -13,17 +13,18 @@ INSERT INTO examyear (NAME) VALUES
                                          ('2024');
 
 INSERT INTO examno (NAME,EXAMDAY) VALUES
-                                                           ('sinagong.co.kr','2023년 02월'),
-                                                           ('comcbt.com','2020년 06월'),
-                                                           ('comcbt.com','2020년 08월'),
-                                                           ('comcbt.com','2020년 09월'),
-                                                           ('comcbt.com','2021년 03월'),
-                                                           ('comcbt.com','2021년 05월'),
-                                                           ('comcbt.com','2021년 08월'),
-                                                           ('comcbt.com','2022년 03월'),
-                                                           ('comcbt.com','2022년 04월'),
-                                                           ('sinagong.co.kr','2022년 07월'),
-                                                           ('sinagong.co.kr','2023년 05월');
+                                       (1,'comcbt.com','2020년 06월'),
+                                       (1,'comcbt.com','2020년 08월'),
+                                       (1,'comcbt.com','2020년 09월'),
+                                       (2,'comcbt.com','2021년 03월'),
+                                       (2,'comcbt.com','2021년 05월'),
+                                       (2,'comcbt.com','2021년 08월'),
+                                       (3,'comcbt.com','2022년 03월'),
+                                       (3,'comcbt.com','2022년 04월'),
+                                       (3,'sinagong.co.kr','2022년 07월'),
+                                       (4,'sinagong.co.kr','2023년 02월'),
+                                       (4,'sinagong.co.kr','2023년 05월');
+
 
 INSERT INTO subject (NAME,QID) VALUES
                                             ('소프트웨어설계',1),
@@ -189,6 +190,7 @@ VALUES(10, 3, '3 무결성', NULL);
 INSERT INTO choice
 (QUESTION_ID, NO, NAME, IMAGEURL)
 VALUES(10, 4, '4 유연성', NULL);
+
 
 
 
