@@ -11,8 +11,12 @@ public class UserController {
 
     @Operation(summary = "로그인 화면으로 이동")
     @GetMapping("/login")
-    public String loginForm(){
+    public String login(){
         return "login";
+    }
+    @GetMapping("/user/login")
+    public String userLogin(){
+        return login();
     }
 
     @GetMapping("/")
@@ -21,6 +25,7 @@ public class UserController {
     }
 
 }
+
 
 
 
