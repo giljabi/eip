@@ -77,7 +77,7 @@
 
             <!-- 이미지가 있는 경우에만 출력 -->
             <div th:if="${question.questionImageFlag}">
-                <img th:src="${question.imageUrl}" alt="Question Image" class="img-fluid mt-3">
+                <img th:src="@{${question.imageUrl}}" alt="Question Image" class="img-fluid mt-3">
             </div>
 
             <ul th:each="choice : ${question.choices}" class="list-group">
@@ -91,8 +91,7 @@
 
                     <label th:for="'choice_' + ${choice.id}" th:text="${choice.name}"></label>
 
-                    <img th:src="${choice.imageUrl}"
-                         th:if="${question.choiceImageFlag}"
+                    <img th:if="${question.choiceImageFlag}" th:src="@{${choice.imageUrl}}"
                          alt="Choice Image"
                          class="img-fluid mt-3">
                 </li>
@@ -116,6 +115,7 @@
 </div>
 </body>
 </html>
+
 
 
 

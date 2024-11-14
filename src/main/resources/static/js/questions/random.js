@@ -8,13 +8,11 @@ function selectSubject() {
 }
 
 function makeSubjectList(qid) {
-    $.ajax({
+    ajaxRequest({
         url: gContextPath + '/questions/random/' + qid,
-        type: 'GET',
-        contentType: 'application/json',
         credentials: 'include',
         async: false,
-        success: function (response) {
+        successCallback: function (response) {
             //reponse가 null이면 /로 보낸다
             if(response.length == 0) {
                 alert('접근 절차가 잘못되었습니다. 첫화면부터 시작해주세요');
@@ -25,13 +23,8 @@ function makeSubjectList(qid) {
                 });
             }
             //console.log(response);
-        },
-        error: function (xhr, status, error) {
-            alert('Failed to submit answers.');
-            console.error(error);
         }
     });
-
 }
 
 
@@ -118,13 +111,12 @@ $(document).ready(function () {
         //console.log(reqData); // 결과를 콘솔에 출력 (테스트용)
 
         // AJAX를 이용해 서버에 제출
-        $.ajax({
+        ajaxRequest({
             url: gContextPath + '/questions/submit-answers',
-            type: 'POST',
-            contentType: 'application/json',
+            method: 'POST',
             data: JSON.stringify(reqData),
-            credentials: 'include',
-            success: function (response) {
+            contentType: 'application/json',
+            successCallback: function(response) {
                 //reponse가 null이면 /로 보낸다
                 if(response.length == 0) {
                     alert('접근 절차가 잘못되었습니다. 첫화면부터 시작해주세요');
@@ -133,10 +125,6 @@ $(document).ready(function () {
                     applyResults(response);
                 }
                 //console.log(response);
-            },
-            error: function (xhr, status, error) {
-                alert('Failed to submit answers.');
-                console.error(error);
             }
         });
     }
@@ -165,6 +153,7 @@ $(document).ready(function () {
     }
 
 });
+
 
 
 
