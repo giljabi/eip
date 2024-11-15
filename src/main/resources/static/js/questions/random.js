@@ -3,20 +3,20 @@ let qid;
 //현재 콤보에서 선택하므로 qid는 필요없다
 function selectSubject() {
     const subjectSelect = $('#subjectSelect').val();
-    const url = gContextPath + '/questions/random/' + qid + '/' + subjectSelect;
+    const url = '/questions/random/' + qid + '/' + subjectSelect;
     window.location.href = url;
 }
 
 function makeSubjectList(qid) {
     ajaxRequest({
-        url: gContextPath + '/questions/random/' + qid,
+        url: '/questions/random/' + qid,
         credentials: 'include',
         async: false,
         successCallback: function (response) {
             //reponse가 null이면 /로 보낸다
             if(response.length == 0) {
                 alert('접근 절차가 잘못되었습니다. 첫화면부터 시작해주세요');
-                window.location.href = gContextPath + '/';
+                window.location.href = '/';
             } else {
                 $.each(response, function(index, item) {
                     $('#subjectSelect').append(new Option(item.name, item.id));
@@ -32,18 +32,16 @@ $(document).ready(function () {
     $('#retryButton').hide();
     $('#submitButton').show();
 
-    const path = window.location.pathname;
-
-    qid = path.split('/')[4];
+    // /questions/random/1/0
+    const pathArray = window.location.pathname.split('/');
+    qid = pathArray[pathArray.length - 2];              // 1
     makeSubjectList(qid);
-
     // select 박스의 값 설정
-    const subjectId = path.split('/')[5];
+    const subjectId = pathArray[pathArray.length - 1];  // 0
     $('#subjectSelect').val(subjectId);
 
-
     $('#viewResultsButton').click(function () {
-        const url = gContextPath + '/questions/results/' + qid;
+        const url = '/questions/results/' + qid;
         const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
 
 /*        // 팝업 차단 방지를 위해 창이 제대로 열리지 않은 경우 처리
@@ -58,7 +56,7 @@ $(document).ready(function () {
         setTimeout(function () {
             $('#retryOverlay').fadeOut();
             const subjectSelect = $('#subjectSelect').val();
-            const url = gContextPath + '/questions/random/' + qid + '/' + subjectSelect;
+            const url = '/questions/random/' + qid + '/' + subjectSelect;
             window.location.href = url;
         }, 1000);
 
@@ -112,7 +110,7 @@ $(document).ready(function () {
 
         // AJAX를 이용해 서버에 제출
         ajaxRequest({
-            url: gContextPath + '/questions/submit-answers',
+            url: '/questions/submit-answers',
             method: 'POST',
             data: JSON.stringify(reqData),
             contentType: 'application/json',
@@ -120,7 +118,7 @@ $(document).ready(function () {
                 //reponse가 null이면 /로 보낸다
                 if(response.length == 0) {
                     alert('접근 절차가 잘못되었습니다. 첫화면부터 시작해주세요');
-                    window.location.href = gContextPath + '/';
+                    window.location.href = '/';
                 } else {
                     applyResults(response);
                 }
@@ -153,6 +151,7 @@ $(document).ready(function () {
     }
 
 });
+
 
 
 

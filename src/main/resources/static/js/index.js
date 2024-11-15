@@ -10,7 +10,7 @@ $(document).ready(function () {
 
     if (existingUuid == 'undefined' || existingUuid == null) {
         ajaxRequest({
-            url: gContextPath + '/questions/generate-uuid',
+            url: '/questions/generate-uuid',
             type: 'GET',
             success: function (data) {
                 $('#uuidResult').text(data);
@@ -20,8 +20,9 @@ $(document).ready(function () {
 
     $('.startButton').click(function () {
         const value = $(this).val();
-        const url = gContextPath + `/questions/random/${value}/0`;
+        const url = `/questions/random/${value}/0`;
         window.location.href = url;
     });
 });
+
 

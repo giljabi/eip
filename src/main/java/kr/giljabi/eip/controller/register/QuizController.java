@@ -12,8 +12,6 @@ import kr.giljabi.eip.service.*;
 import kr.giljabi.eip.util.ResponseGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,22 +33,17 @@ public class QuizController {
     private final SubjectService subjectService;
     private final QNameService qNameService;
 
-    private final String contextPath;
-
     @Autowired
     public QuizController(QuestionService questionService,
                           ChoiceService choiceService,
                           ExamNoService examNoService,
                           SubjectService subjectService,
-                          QNameService qNameService,
-                          ServerProperties serverProperties) {
+                          QNameService qNameService) {
         this.questionService = questionService;
         this.choiceService = choiceService;
         this.examNoService = examNoService;
         this.subjectService = subjectService;
         this.qNameService = qNameService;
-        this.contextPath = serverProperties.getServlet().getContextPath() == "/"
-                ? "" : serverProperties.getServlet().getContextPath();
 
     }
 
@@ -201,10 +194,10 @@ public class QuizController {
         List<QuestionDTO> questionDTOList = questions.stream().map(q ->  new QuestionDTO(
                 q.getId(), q.getExamNo().getId(), q.getExamNo().getName(), q.getExamNo().getExamDay(),
                 q.getSubject().getId(), q.getSubject().getName(),
-                q.getCorrect(), q.getName(), contextPath + q.getImageUrl(), q.getNo(), q.isQuestionImageFlag(),
+                q.getCorrect(), q.getName(), q.getImageUrl(), q.getNo(), q.isQuestionImageFlag(),
                 q.isChoiceImageFlag(), q.isUseFlag(),
                 q.getChoices().stream().map(choice -> new ChoiceDTO(
-                        choice.getId(), choice.getNo(), choice.getName(), contextPath + choice.getImageUrl()))
+                        choice.getId(), choice.getNo(), choice.getName(), choice.getImageUrl()))
                         .collect(Collectors.toList())
                 )).collect(Collectors.toList());
 
@@ -213,6 +206,7 @@ public class QuizController {
     }
 
 }
+
 
 
 

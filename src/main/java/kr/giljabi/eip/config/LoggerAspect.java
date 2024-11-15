@@ -40,7 +40,7 @@ public class LoggerAspect {
                 .getRequest();
 
         String controllerName = pjp.getSignature().getDeclaringType().getSimpleName();
-        String methodName = pjp.getSignature().getName();
+        //String methodName = pjp.getSignature().getName();
         //String remoteAddr = request.getHeader("X-Forwarded-For"); //nginx 사용시 remoteAddr
         String remoteAddr = getClientIp(request);
         String mappingType = getMappingType(pjp);
@@ -55,7 +55,7 @@ public class LoggerAspect {
             paramList = new ArrayList<>();
 
         log.info("===========================================");
-        log.info("IP:{} {} {}", remoteAddr, mappingType, request.getRequestURI());
+        log.info("{} {} {} {}", remoteAddr, controllerName, mappingType, request.getRequestURI());
         for(JSONObject map : paramList) {
             log.info("param:{}", getLogString(map.toString()));
         }
@@ -146,4 +146,5 @@ public class LoggerAspect {
         return "UNKNOWN";  // Default fall-back
     }
 }
+
 

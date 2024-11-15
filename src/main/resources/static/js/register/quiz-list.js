@@ -25,7 +25,7 @@ $(document).ready(function() {
             alert("검색어는 2자 이상 입력해 주세요.");
             return;
         }
-        let url = gContextPath + '/register/quiz-list/' + qid + '/' + subjectId + '?examNo=' + examId + '&name=' + encodeURIComponent(search);
+        let url = '/register/quiz-list/' + qid + '/' + subjectId + '?examNo=' + examId + '&name=' + encodeURIComponent(search);
 
         // 세 개 모두 선택되어야 하는 조건 확인 //examId && examId !== "0" && subjectId && subjectId !== "0"&&
         if (qid && qid !== "0") {
@@ -76,17 +76,18 @@ $(document).ready(function() {
 // 이벤트 위임 방식으로 클릭 이벤트를 설정
     $('#questionContainer').on('click', '.question-row', function () {
         const id = $(this).data('id');
-        window.open(gContextPath + `/register/quiz/${id}`, 'QuizPopup', 'width=600,height=800,resizable=yes,scrollbars=yes');
+        window.open(`/register/quiz/${id}`, 'QuizPopup', 'width=600,height=800,resizable=yes,scrollbars=yes');
     });
 
     $('#new').on('click', function (event) {
-        window.open(gContextPath + `/register/quiz/`, 'QuizPopup', 'width=600,height=800,resizable=yes,scrollbars=yes');
+        window.open(`/register/quiz/`, 'QuizPopup', 'width=600,height=800,resizable=yes,scrollbars=yes');
     });
 
     $('#loader').on('click', function (event) {
-        window.open(gContextPath + '/register/quizloader', 'QuizPopup', 'width=800,height=800,resizable=yes,scrollbars=yes');
+        window.open('/register/quizloader', 'QuizPopup', 'width=800,height=800,resizable=yes,scrollbars=yes');
     });
 
 });
+
 
 

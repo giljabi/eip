@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import kr.giljabi.eip.dto.request.UserResultDTO;
 import kr.giljabi.eip.service.ResultsService;
 import kr.giljabi.eip.util.CommonUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequestMapping("/questions")
 public class ResultsController {
@@ -31,6 +33,7 @@ public class ResultsController {
         String uuid = CommonUtils.getCookieValue(request, CommonUtils.UUID_COOKIE_NAME);
         List<UserResultDTO> results = resultService.findByUuid(uuid, qid);
         model.addAttribute("results", results);
+        log.info("UUID: {}", uuid);
         return "questions/results";
     }
 /*
@@ -68,4 +71,5 @@ public class ResultsController {
 
  */
 }
+
 

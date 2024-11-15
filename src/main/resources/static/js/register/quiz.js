@@ -162,14 +162,14 @@ $(document).ready(function() {
             };
             formData.append('jsonData', new Blob([JSON.stringify(jsonData)], { type: 'application/json' }));
             ajaxRequest({
-                url: gContextPath + '/register/quiz',
+                url: '/register/quiz',
                 method: 'POST',
                 data: formData,
                 isFormData: true,
                 successCallback: function(response) {
                     if(response.code == 200) {
                         alert('문제가 등록되었습니다.');
-                        location.href = gContextPath + '/register/quiz'; // 다음문제를 연속으로 입력하기 위해 입력창으로 이동
+                        location.href = '/register/quiz'; // 다음문제를 연속으로 입력하기 위해 입력창으로 이동
                     } else {
                         alert(response.message);
                         return;
@@ -183,5 +183,6 @@ $(document).ready(function() {
         this.window.close();
     });
 });
+
 
 

@@ -2,7 +2,7 @@
 # My Quiz...
 * 만든 이유, 정보처리기사 자격증 취득을 위한 필기시험 대비
 * 각 자격증 시험 문제를 관리, 풀이할 수 있는 반응형 웹 프로젝트
-* Demo: http://localhost:8888/eip, http://3.37.253.88:8888/eip (언제 중지될지 모름)
+* Demo: http://localhost:8888, http://3.37.253.88:8888 (언제 중지될지 모름)
 
 ![img.png](docs/random-quiz.png)
 

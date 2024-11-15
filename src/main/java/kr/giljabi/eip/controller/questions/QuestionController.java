@@ -89,6 +89,7 @@ public class QuestionController {
         List<Question> questions = questionService.getRandomQuestions(qid, subjectId,
                 uuid, CommonUtils.getClientIp(request));
         model.addAttribute("questions", questions);
+        log.info("UUID: {}", uuid);
         return "questions/random";
     }
 
@@ -106,7 +107,6 @@ public class QuestionController {
         }
         // 사용자가 제출한 답변을 처리하고 정답 여부 판단
         String clientUUID = CommonUtils.getCookieValue(request, CommonUtils.UUID_COOKIE_NAME);
-        log.info("clientUUID: " + clientUUID);
 
         for (AnswerDTO answer : answerRequest.getAnswers()) {
             Long questionId = Long.valueOf(answer.getId());
@@ -138,13 +138,14 @@ public class QuestionController {
             Results userResult = new Results(clientUUID, questionId, userAnswer,
                     correct, CommonUtils.getClientIp(request), qName.getId());
             resultService.save(userResult);
-            log.info("userResult: " + userResult.toString());
         }
         // 결과를 모델에 추가하여 결과 페이지로 전달
         model.addAttribute("results", results);
+        log.info("UUID: {}", clientUUID);
         return ResponseEntity.ok(results);
     }
 }
+
 
 
 
