@@ -10,21 +10,23 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Operation(summary = "로그인 화면으로 이동")
-    @GetMapping("/login")
+    @RequestMapping("/login")
     public String login(){
         return "login";
     }
-    @GetMapping("/user/login")
+
+    @RequestMapping("/user/login")
     public String userLogin(){
         return login();
     }
 
-    @GetMapping("/")
+    @RequestMapping("/")
     public String index(){
         return "index";
     }
 
 }
+
 
 
 
