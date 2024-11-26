@@ -1,4 +1,4 @@
-let qid;
+ilet qid;
 
 //현재 콤보에서 선택하므로 qid는 필요없다
 function selectSubject() {
@@ -25,6 +25,41 @@ function makeSubjectList(qid) {
             //console.log(response);
         }
     });
+}
+
+function askQuestion(questionId) {
+    $('#quizExplanation').html('Loading...');
+    $('#askResultModal').show();
+    ajaxRequest({
+        url: `/questions/ask/${questionId}`,
+        method: 'GET',
+        async: true,
+        contentType: 'application/json',
+        successCallback: function(response) {
+            if (response.code == 200) {
+                $('#gptModelName').text(response.data.model);
+                let gptTokens = `<td>${response.data.usage.prompt_tokens}</td>
+                                <td>${response.data.usage.completion_tokens}</td>
+                                <td>${response.data.usage.total_tokens}</td>`;
+                $('#gptTokens').html(gptTokens);
+
+                let contentHtml = '';
+                $.each(response.data.choices, function(index, item) {
+                    contentHtml += item.message.content.replace(/\n/g, '<br>') + '<br><br>';
+                });
+                $('#quizExplanation').html(contentHtml);
+            } else {
+                // 실패 시 기본 메시지
+                $('#quizExplanation').html('<p>Failed to load data.</p>');
+            }
+        }
+    });
+}
+
+function closeAskResultModal() {
+    $('#askResultModal').hide();
+    $('#quizExplanation').html('Loading...');
+    $('#gptTokens').html('<td></td><td></td><td></td>');
 }
 
 
@@ -150,7 +185,10 @@ $(document).ready(function () {
         $('#retryButton').show();
     }
 
+
+
 });
+
 
 
 

@@ -26,8 +26,14 @@ giljabi:
   question:
     max: 5
 
+openai:
+  api:
+    key: ENC(0Lcv2N9KaHiza/78jYZaL5jK5OaVi31s5OjlYofYBjMEf4+LT3mWW4u/uY9zDZDMU2rIlb8IMs/vvNxOi11ph46w+D76lzXLH6iNy1lgyve03idlK5rebOsQOrLnrAc/WrtT0zKuvaXSGUyTUoYAIRqRqXdzhJ5ESRnZveKsqazLbRn1vsu9SNmDt8xWstT0JcHd6HvpEbTuJUewzHhHqxxEM/u5JbwagCsDWyd3OWc=)
+    url: https://api.openai.com/v1/chat/completions
+
 logging:
   level:
     com.ulisesbocchio.jasyptspringboot.encryptor.DefaultLazyEncryptor: WARN
+
 
 
