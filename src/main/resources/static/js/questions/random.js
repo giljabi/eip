@@ -1,4 +1,4 @@
-ilet qid;
+let qid;
 
 //현재 콤보에서 선택하므로 qid는 필요없다
 function selectSubject() {
@@ -28,7 +28,7 @@ function makeSubjectList(qid) {
 }
 
 function askQuestion(questionId) {
-    $('#quizExplanation').html('Loading...');
+    $('#quizExplanation').html('<img src="/images/common/ajax-loader.gif" style="width: 200px;" alt="Loading..." />');
     $('#askResultModal').show();
     ajaxRequest({
         url: `/questions/ask/${questionId}`,
@@ -58,7 +58,6 @@ function askQuestion(questionId) {
 
 function closeAskResultModal() {
     $('#askResultModal').hide();
-    $('#quizExplanation').html('Loading...');
     $('#gptTokens').html('<td></td><td></td><td></td>');
 }
 
@@ -143,21 +142,20 @@ $(document).ready(function () {
         reqData.answers = userAnswer;
         //console.log(reqData); // 결과를 콘솔에 출력 (테스트용)
 
-        // AJAX를 이용해 서버에 제출
         ajaxRequest({
             url: '/questions/submit-answers',
             method: 'POST',
             data: JSON.stringify(reqData),
             contentType: 'application/json',
             successCallback: function(response) {
-                //reponse가 null이면 /로 보낸다
                 if(response.length == 0) {
                     alert('접근 절차가 잘못되었습니다. 첫화면부터 시작해주세요');
                     window.location.href = '/';
                 } else {
                     applyResults(response);
+                    if ($('#isAdmin').val() == 'true')
+                        $('button.btn-success').show(); // GPT 해설보기 버튼
                 }
-                //console.log(response);
             }
         });
     }

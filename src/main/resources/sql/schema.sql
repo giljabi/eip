@@ -100,6 +100,4 @@ CREATE TABLE results (
 CREATE INDEX idx_results_uuid ON results USING btree (uuid);
 ALTER TABLE results ADD CONSTRAINT fk_results_question_id FOREIGN KEY (question_id) REFERENCES question(id);
 
-
-
-
+-- gpt사용 결과, 날짜별 토큰 사용량만 계산, 토큰 사용량은 1일 10000개 초과시 중단

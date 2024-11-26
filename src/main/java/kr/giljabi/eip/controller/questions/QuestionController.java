@@ -1,19 +1,21 @@
 package kr.giljabi.eip.controller.questions;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.swagger.v3.oas.annotations.Operation;
 import kr.giljabi.eip.dto.request.AnswerDTO;
 import kr.giljabi.eip.dto.request.AnswerRequest;
 import kr.giljabi.eip.dto.response.AnswerCorrectPercentageDto;
 import kr.giljabi.eip.dto.response.AnswerResult;
-import kr.giljabi.eip.model.QName;
-import kr.giljabi.eip.model.Question;
-import kr.giljabi.eip.model.Results;
-import kr.giljabi.eip.model.Subject;
+import kr.giljabi.eip.model.*;
 import kr.giljabi.eip.repository.SubjectRepository;
+import kr.giljabi.eip.service.JwtProviderService;
 import kr.giljabi.eip.service.QuestionService;
 import kr.giljabi.eip.service.ResultsService;
 import kr.giljabi.eip.util.CommonUtils;
+import kr.giljabi.eip.util.JwtProvider;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,11 +35,16 @@ public class QuestionController {
     private final QuestionService questionService;
     private final ResultsService resultService;
     private final SubjectRepository subjectRepository;
+    private final JwtProviderService jwtProviderService;
 
-    public QuestionController(QuestionService questionService, ResultsService resultService, SubjectRepository subjectRepository) {
+    public QuestionController(QuestionService questionService,
+                              ResultsService resultService,
+                              SubjectRepository subjectRepository,
+                              JwtProviderService jwtProviderService) {
         this.questionService = questionService;
         this.resultService = resultService;
         this.subjectRepository = subjectRepository;
+        this.jwtProviderService = jwtProviderService;
     }
 
     @Operation(summary = "cookie 생성", description = "발급 후 1년 사용")
@@ -81,6 +88,14 @@ public class QuestionController {
                                      @PathVariable Integer subjectId,
                                      HttpServletRequest request,
                                      Model model) {
+        try {
+            //관리자만 AI기능을 사용하기 위해 세션정보를 추가
+            String userInfo = jwtProviderService.getSessionByUserinfo(request);
+            model.addAttribute("admin", userInfo);
+        } catch (Exception e) {
+            //log.error("error: {}", e.getMessage());
+        }
+
         String uuid = CommonUtils.getCookieValue(request, CommonUtils.UUID_COOKIE_NAME);
         if (uuid == null) {
             model.addAttribute("results", null);

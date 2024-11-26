@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.giljabi.eip.dto.gpt.ChatGPTRequest;
 import kr.giljabi.eip.dto.gpt.ChatGPTResponse;
 import kr.giljabi.eip.model.Question;
+import kr.giljabi.eip.model.TokenUsage;
 import kr.giljabi.eip.repository.QuestionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -22,8 +23,9 @@ import java.util.Collections;
 @Slf4j
 public class ChatGPTService {
     private final QuestionRepository questionRepository;
-
     private final RestTemplate restTemplate;
+
+    private final TokenUsageService tokenUsageService;
 
     @Value("${openai.api.key}")
     private String apiKey;
@@ -34,9 +36,11 @@ public class ChatGPTService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public ChatGPTService(QuestionRepository questionRepository,
-                          RestTemplate restTemplate) {
+                          RestTemplate restTemplate,
+                          TokenUsageService tokenUsageService) {
         this.questionRepository = questionRepository;
         this.restTemplate = restTemplate;
+        this.tokenUsageService = tokenUsageService;
     }
 
     public Question findById(Long id) {
@@ -86,6 +90,14 @@ public class ChatGPTService {
 
         ChatGPTResponse chatGPTResponse = objectMapper.readValue(response.getBody(), ChatGPTResponse.class);
         log.info("chatGPTResponse: {}", chatGPTResponse);
+
+        //오늘 날짜를 YYYY-MM-DD 형식으로 저장
+        String date = java.time.LocalDate.now().toString();
+        TokenUsage tokenUsage = new TokenUsage(date,
+                chatGPTResponse.getUsage().getPrompt_tokens(),
+                chatGPTResponse.getUsage().getCompletion_tokens(),
+                chatGPTResponse.getUsage().getTotal_tokens());
+        tokenUsageService.saveOrUpdateTokenUsage(tokenUsage);
 
         return chatGPTResponse;
     }

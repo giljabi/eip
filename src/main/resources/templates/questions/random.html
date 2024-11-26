@@ -89,6 +89,8 @@
 
 <div class="container">
     <h1><a th:href="@{/}">My Quizzz</a></h1>
+    <input id="isAdmin" class="adminAiButton" th:value="${admin != null ? 'true' : 'false'}" style="display: none;"/>
+
     <button type="submit" id="viewResultsButton" class="btn btn-primary mt-3 w-100">나의 결과보기</button>
     <!-- 추가된 select 박스 -->
     <div class="mt-3">
@@ -97,7 +99,6 @@
         </select>
     </div>
     <button type="submit" id="" class="btn btn-primary mt-3 w-100"></button>
-
 
     <div th:each="question : ${questions}" class="card mt-3">
         <input type="hidden" name="question-id" id="question-id" th:value="${question.id}">
@@ -128,8 +129,8 @@
                 </li>
             </ul>
         </div>
-        <button type="button" class="btn btn-primary mt-3 mb-5 w-100"
-                th:onclick="'askQuestion(' + ${question.id} + ')'">ChatGPT</button>
+        <button type="button" class="btn btn-success mt-3 mb-5 w-100" style="display: none;"
+                th:onclick="'askQuestion(' + ${question.id} + ')'">AI 해설보기</button>
     </div>
 
     <button type="submit" id="submitButton" class="btn btn-primary mt-3 mb-5 w-100">정답 확인</button>
@@ -176,8 +177,10 @@
     </div>
     <div>
         <div>
-            GPT 정답과 설명(GPT가 틀릴 수 있음)<br/>
-            <p id="quizExplanation">Loading.......기다려 주세요</p>
+            AI정답과 설명(AI가 틀릴 수 있음)<br/><br/>
+            <p id="quizExplanation">
+                <img src="/images/common/ajax-loader.gif" style="width: 100px;" alt="Loading..." />
+            </p>
         </div>
         <div>
             <button type="button" class="btn btn-secondary mt-3" onclick="closeAskResultModal();">Close</button>
