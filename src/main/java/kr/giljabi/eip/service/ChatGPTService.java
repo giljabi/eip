@@ -99,11 +99,12 @@ public class ChatGPTService {
         TokenUsage tokenUsage = new TokenUsage(date,
                 chatGPTResponse.getUsage().getPrompt_tokens(),
                 chatGPTResponse.getUsage().getCompletion_tokens(),
-                chatGPTResponse.getUsage().getTotal_tokens());
+                chatGPTResponse.getUsage().getTotal_tokens(), 1); //요청 횟수는 +1
         tokenUsageService.saveOrUpdateTokenUsage(tokenUsage);
 
         return chatGPTResponse;
     }
 }
+
 
 

@@ -108,3 +108,4 @@ CREATE TABLE tokenusage (
                             completion_tokens INTEGER NOT NULL DEFAULT 0,
                             total_tokens INTEGER NOT NULL DEFAULT 0
 );
+alter table tokenusage add column reqcnt int default 0; --요청건수

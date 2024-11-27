@@ -26,6 +26,7 @@ class TokenUsageService {
             existing.setPromptTokens(existing.getPromptTokens() + tokenUsage.getPromptTokens());
             existing.setCompletionTokens(existing.getCompletionTokens() + tokenUsage.getCompletionTokens());
             existing.setTotalTokens(existing.getTotalTokens() + tokenUsage.getTotalTokens());
+            existing.setReqcnt(existing.getReqcnt() + tokenUsage.getReqcnt());
             return tokenUsageRepository.save(existing);
         } else {
             return tokenUsageRepository.save(tokenUsage);
