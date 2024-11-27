@@ -56,27 +56,33 @@ public class ChatGPTService {
     public ChatGPTResponse getQuizResponse(Long id) throws Exception {
         Question question = findById(id);
         log.info("Question: {}", question);
-        // Combine question and choices into a single prompt
+
+        ArrayList<ChatGPTRequest.Message> messages = new ArrayList<>();
+        //role: system
+        messages.add(new ChatGPTRequest.Message("system",
+                "당신은 나의 " + question.getSubject().getName()+ " 선생님입니다."));
+
+        //role: user
         StringBuilder prompt = new StringBuilder()
                 .append(question.getName()).append("\n");
 
         if(question.isQuestionImageFlag())
             prompt.append("![image](").append(baseUrl + question.getImageUrl()).append(")\n");
 
+        prompt.append("선택지\n");
         for (int i = 0; i < question.getChoices().size(); i++) {
-            prompt.append(question.getChoices().get(i).getName()).append("\n");
-            if(question.isChoiceImageFlag())
+            if(question.isChoiceImageFlag()) { //선택지에 이미지가 있으면, 선택 번호와 이미지 연결
+                prompt.append(question.getChoices().get(i).getNo() + " ");
                 prompt.append("![image](").append(baseUrl + question.getChoices().get(i).getImageUrl()).append(")\n");
+            } else {
+                String choiceString = question.getChoices().get(i).getName();
+                prompt.append(choiceString).append("\n");
+            }
         }
-        prompt.append("정답을 먼저 알려주고 다음줄에 문제에서 알아야 하는 것이 무엇인지 설명해줘.");
+        prompt.append("\n정답번호를 먼저 알려주고, 다음줄부터 풀이과정을 상세히 설명해 주세요.");
+        messages.add(new ChatGPTRequest.Message("user", prompt.toString()));
 
         ChatGPTRequest request = new ChatGPTRequest(gptModel, new ArrayList<>());
-        ArrayList<ChatGPTRequest.Message> messages = new ArrayList<>();
-
-        // Prepare request body, 2개 조건
-        messages.add(new ChatGPTRequest.Message("user",
-                "시험 과목은 \"" +  question.getSubject().getName() + "\"이며, 시험 과목에 맞는 설명이 필요하다."));
-        messages.add(new ChatGPTRequest.Message("user", prompt.toString()));
         request.setMessages(messages);
 
         HttpHeaders headers = new HttpHeaders();
@@ -84,12 +90,12 @@ public class ChatGPTService {
         headers.setBearerAuth(apiKey);
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonString = objectMapper.writeValueAsString(request);
-        //log.info("request : {}", jsonString);
+        log.info("request : {}", jsonString);
 
         HttpEntity<String> entity = new HttpEntity<>(jsonString, headers);
         ResponseEntity<String> response = restTemplate.exchange(
                 apiUrl, HttpMethod.POST, entity, String.class);
-        //log.info("response: {}", response.getBody());
+        log.info("response: {}", response.getBody());
 
         ChatGPTResponse chatGPTResponse = objectMapper.readValue(response.getBody(), ChatGPTResponse.class);
         //log.info("chatGPTResponse: {}", chatGPTResponse);
@@ -105,6 +111,7 @@ public class ChatGPTService {
         return chatGPTResponse;
     }
 }
+
 
 
 
