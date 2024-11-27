@@ -2,7 +2,9 @@ server:
   port: 8888
   error:
     include-message: always
-
+  servlet:
+    session:
+      timeout: 60m
 spring:
   config:
     activate:
@@ -25,17 +27,19 @@ spring:
 giljabi:
   question:
     max: 5
-
+  baseurl: ENC(Opd6AMfCkgbuweVqHK0+uo+FsGNyL/Gj) #AI에 이미지를 전달할때 사용하는 도메인정보
 openai:
   api:
     key: ENC(0Lcv2N9KaHiza/78jYZaL5jK5OaVi31s5OjlYofYBjMEf4+LT3mWW4u/uY9zDZDMU2rIlb8IMs/vvNxOi11ph46w+D76lzXLH6iNy1lgyve03idlK5rebOsQOrLnrAc/WrtT0zKuvaXSGUyTUoYAIRqRqXdzhJ5ESRnZveKsqazLbRn1vsu9SNmDt8xWstT0JcHd6HvpEbTuJUewzHhHqxxEM/u5JbwagCsDWyd3OWc=)
     url: https://api.openai.com/v1/chat/completions
     max: 10000  #일일 사용가능한 토큰수
+    model: gpt-4 # 비용순: gpt-4, ggpt-4o-mini, gpt-3.5-turbo
 logging:
   level:
     com.ulisesbocchio.jasyptspringboot.encryptor.DefaultLazyEncryptor: WARN
 jwt:
   accessTokenSecret: ENC(EfK1TzoFcfkKSLLRMKzLnnZ14Qps1RKOC/TlVsVwNWOHqms0jVMeaJcnqdyPH0NkGjnf2c8UA5I=)
   accessTokenExpiration: 604800000
+
 
 

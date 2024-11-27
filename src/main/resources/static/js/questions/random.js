@@ -50,7 +50,7 @@ function askQuestion(questionId) {
                 $('#quizExplanation').html(contentHtml);
             } else {
                 // 실패 시 기본 메시지
-                $('#quizExplanation').html('<p>Failed to load data.</p>');
+                $('#quizExplanation').html(`<p>${response.message}</p>`);
             }
         }
     });
@@ -186,6 +186,7 @@ $(document).ready(function () {
 
 
 });
+
 
 
 

@@ -33,6 +33,12 @@ public class ChatGPTService {
     @Value("${openai.api.url}")
     private String apiUrl;
 
+    @Value("${openai.api.model}")
+    private String gptModel;
+
+    @Value("${giljabi.baseurl}")
+    private String baseUrl;
+
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public ChatGPTService(QuestionRepository questionRepository,
@@ -55,41 +61,38 @@ public class ChatGPTService {
                 .append(question.getName()).append("\n");
 
         if(question.isQuestionImageFlag())
-            prompt.append("![image](").append("https://eahn.kr" + question.getImageUrl()).append(")\n");
+            prompt.append("![image](").append(baseUrl + question.getImageUrl()).append(")\n");
 
         for (int i = 0; i < question.getChoices().size(); i++) {
             prompt.append(question.getChoices().get(i).getName()).append("\n");
             if(question.isChoiceImageFlag())
-                prompt.append("![image](").append("https://eahn.kr" + question.getChoices().get(i).getImageUrl()).append(")\n");
+                prompt.append("![image](").append(baseUrl + question.getChoices().get(i).getImageUrl()).append(")\n");
         }
         prompt.append("정답을 먼저 알려주고 다음줄에 문제에서 알아야 하는 것이 무엇인지 설명해줘.");
 
-        //gpt-3.5-turbo, gpt-4o-mini
-        ChatGPTRequest request = new ChatGPTRequest("gpt-4o-mini", new ArrayList<>());
+        ChatGPTRequest request = new ChatGPTRequest(gptModel, new ArrayList<>());
         ArrayList<ChatGPTRequest.Message> messages = new ArrayList<>();
 
         // Prepare request body, 2개 조건
-        messages.add(new ChatGPTRequest.Message("user", prompt.toString()));
         messages.add(new ChatGPTRequest.Message("user",
-                "시험 과목은 " +  question.getSubject().getName() + "이다. 시험 과목에 맞는 설명을 해줘"));
+                "시험 과목은 \"" +  question.getSubject().getName() + "\"이며, 시험 과목에 맞는 설명이 필요하다."));
+        messages.add(new ChatGPTRequest.Message("user", prompt.toString()));
         request.setMessages(messages);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(apiKey);
-
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonString = objectMapper.writeValueAsString(request);
-        log.info("request : {}", jsonString);
+        //log.info("request : {}", jsonString);
 
         HttpEntity<String> entity = new HttpEntity<>(jsonString, headers);
-
         ResponseEntity<String> response = restTemplate.exchange(
                 apiUrl, HttpMethod.POST, entity, String.class);
-        log.info("response: {}", response.getBody());
+        //log.info("response: {}", response.getBody());
 
         ChatGPTResponse chatGPTResponse = objectMapper.readValue(response.getBody(), ChatGPTResponse.class);
-        log.info("chatGPTResponse: {}", chatGPTResponse);
+        //log.info("chatGPTResponse: {}", chatGPTResponse);
 
         //오늘 날짜를 YYYY-MM-DD 형식으로 저장
         String date = java.time.LocalDate.now().toString();
@@ -102,4 +105,5 @@ public class ChatGPTService {
         return chatGPTResponse;
     }
 }
+
 
