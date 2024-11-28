@@ -1,5 +1,6 @@
 package kr.giljabi.eip.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.giljabi.eip.dto.gpt.ChatGPTRequest;
 import kr.giljabi.eip.dto.gpt.ChatGPTResponse;
@@ -57,6 +58,22 @@ public class ChatGPTService {
         Question question = findById(id);
         log.info("Question: {}", question);
 
+        ArrayList<ChatGPTRequest.Message> messages = makeMessage(question);
+
+        ChatGPTResponse chatGPTResponse = getChatGPTResponse(messages);
+
+        //오늘 날짜를 YYYY-MM-DD 형식으로 저장
+        String date = java.time.LocalDate.now().toString();
+        TokenUsage tokenUsage = new TokenUsage(date,
+                chatGPTResponse.getUsage().getPrompt_tokens(),
+                chatGPTResponse.getUsage().getCompletion_tokens(),
+                chatGPTResponse.getUsage().getTotal_tokens(), 1); //요청 횟수는 +1
+        tokenUsageService.saveOrUpdateTokenUsage(tokenUsage);
+
+        return chatGPTResponse;
+    }
+
+    private ArrayList<ChatGPTRequest.Message> makeMessage(Question question) {
         ArrayList<ChatGPTRequest.Message> messages = new ArrayList<>();
         //role: system
         messages.add(new ChatGPTRequest.Message("system",
@@ -79,9 +96,12 @@ public class ChatGPTService {
                 prompt.append(choiceString).append("\n");
             }
         }
-        prompt.append("\n정답번호를 먼저 알려주고, 다음줄부터 풀이과정을 상세히 설명해 주세요.");
+        prompt.append("\n정답번호를 먼저 알려주고, 다음줄부터 풀이과정을 상세히 설명해주세요");
         messages.add(new ChatGPTRequest.Message("user", prompt.toString()));
+        return messages;
+    }
 
+    private ChatGPTResponse getChatGPTResponse(ArrayList<ChatGPTRequest.Message> messages) throws JsonProcessingException {
         ChatGPTRequest request = new ChatGPTRequest(gptModel, new ArrayList<>());
         request.setMessages(messages);
 
@@ -99,18 +119,10 @@ public class ChatGPTService {
 
         ChatGPTResponse chatGPTResponse = objectMapper.readValue(response.getBody(), ChatGPTResponse.class);
         //log.info("chatGPTResponse: {}", chatGPTResponse);
-
-        //오늘 날짜를 YYYY-MM-DD 형식으로 저장
-        String date = java.time.LocalDate.now().toString();
-        TokenUsage tokenUsage = new TokenUsage(date,
-                chatGPTResponse.getUsage().getPrompt_tokens(),
-                chatGPTResponse.getUsage().getCompletion_tokens(),
-                chatGPTResponse.getUsage().getTotal_tokens(), 1); //요청 횟수는 +1
-        tokenUsageService.saveOrUpdateTokenUsage(tokenUsage);
-
         return chatGPTResponse;
     }
 }
+
 
 
 

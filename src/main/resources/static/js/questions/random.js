@@ -45,9 +45,10 @@ function askQuestion(questionId) {
 
                 let contentHtml = '';
                 $.each(response.data.choices, function(index, item) {
-                    contentHtml += item.message.content.replace(/\n/g, '<br>') + '<br><br>';
+                    contentHtml += item.message.content; //.replace(/\n/g, '<br>') + '<br><br>';
                 });
-                $('#quizExplanation').html(contentHtml);
+                const converter = new showdown.Converter();
+                $('#quizExplanation').html(converter.makeHtml(contentHtml));
             } else {
                 // 실패 시 기본 메시지
                 $('#quizExplanation').html(`<p>${response.message}</p>`);
@@ -186,6 +187,7 @@ $(document).ready(function () {
 
 
 });
+
 
 
 
