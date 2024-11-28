@@ -13,6 +13,10 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/images/**")
                 .addResourceLocations("file:" + filePath);
+
+        // favicon.ico 무시
+        registry.addResourceHandler("/favicon.ico")
+		.addResourceLocations("classpath:/static/");
     }
 
 }
