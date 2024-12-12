@@ -2,8 +2,17 @@
 # My Quiz...
 * 만든 이유, 정보처리기사 자격증 취득을 위한 필기시험 대비
 * 각 자격증 시험 문제를 관리, 풀이할 수 있는 반응형 웹 프로젝트
-* Demo: http://localhost:8888, http://3.37.253.88:8888 (언제 중지될지 모름)
+* Demo: http://localhost:8888, https://eahn.kr(http://3.37.253.88:8888) 
 
+## 2024.12.12
+* 모든 사용자 AI해설 기능 사용가능하게 변경하고 서버에 적용, **정보처리기사에서 요구하는 답과 다른 경우가 있음**
+
+![img.png](docs/ai-button.png)
+
+![img_1.png](docs/ai-response.png)
+
+
+## 2024.11.28
 ![img.png](docs/random-quiz.png)
 
 * 정답확인

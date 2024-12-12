@@ -43,7 +43,9 @@ function askQuestion(questionId) {
                                 <td>${response.data.usage.total_tokens}</td>`;
                 $('#gptTokens').html(gptTokens);
                 const converter = new showdown.Converter();
-                $('#quizExplanation').html(converter.makeHtml(response.data.answer));
+                $('#quizExplanation')
+                    .css('text-align', 'left')
+                    .html(converter.makeHtml(response.data.answer));
             } else {
                 // 실패 시 기본 메시지
                 $('#quizExplanation').html(`<p>${response.message}</p>`);
@@ -55,6 +57,7 @@ function askQuestion(questionId) {
 function closeAskResultModal() {
     $('#askResultModal').hide();
     $('#gptTokens').html('<td></td><td></td><td></td>');
+    $('#quizExplanation').css({'font-size':'18px', 'text-align': 'center'});
 }
 
 
@@ -182,6 +185,7 @@ $(document).ready(function () {
 
 
 });
+
 
 
 

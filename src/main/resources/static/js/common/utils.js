@@ -16,8 +16,9 @@ function ajaxRequest({url, method = 'GET',
                          async = false,
                          successCallback,
                          errorCallback }) {
+    const fullUrl = `${window.location.protocol}//${window.location.host}${url}`;
     $.ajax({
-        url: url,
+        url: fullUrl,
         type: method,
         data: data,
         async: async,
@@ -78,6 +79,7 @@ function getExamDay(qid) {
         }
     });
 }
+
 
 
 
