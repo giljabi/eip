@@ -109,3 +109,16 @@ CREATE TABLE tokenusage (
                             total_tokens INTEGER NOT NULL DEFAULT 0
 );
 alter table tokenusage add column reqcnt int default 0; --요청건수
+
+-- ai 모델이 사용한 결과를 저장해서 있으면 사용 없으면 AI사용
+CREATE TABLE aiquery (
+                         id SERIAL PRIMARY KEY,
+                         question_id INT not null,	-- fk 연결하지 않음
+                         aimodel varchar(64) not null, -- ai model name
+                         prompt_tokens INTEGER NOT NULL DEFAULT 0,
+                         completion_tokens INTEGER NOT NULL DEFAULT 0,
+                         total_tokens INTEGER NOT NULL DEFAULT 0,
+                         response_time INTEGER NOT NULL DEFAULT 0,
+                         answer VARCHAR(2048)
+);
+create index idx_question_aimodel on aiquery(question_id, aimodel);

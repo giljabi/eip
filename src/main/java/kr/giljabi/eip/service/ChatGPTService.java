@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.giljabi.eip.dto.gpt.ChatGPTRequest;
 import kr.giljabi.eip.dto.gpt.ChatGPTResponse;
+import kr.giljabi.eip.model.AiQuery;
+import kr.giljabi.eip.model.Choice;
 import kr.giljabi.eip.model.Question;
 import kr.giljabi.eip.model.TokenUsage;
 import kr.giljabi.eip.repository.QuestionRepository;
@@ -19,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -27,6 +30,7 @@ public class ChatGPTService {
     private final RestTemplate restTemplate;
 
     private final TokenUsageService tokenUsageService;
+    private final AiQueryService aiQueryService;
 
     @Value("${openai.api.key}")
     private String apiKey;
@@ -44,10 +48,12 @@ public class ChatGPTService {
 
     public ChatGPTService(QuestionRepository questionRepository,
                           RestTemplate restTemplate,
-                          TokenUsageService tokenUsageService) {
+                          TokenUsageService tokenUsageService,
+                          AiQueryService aiQueryService) {
         this.questionRepository = questionRepository;
         this.restTemplate = restTemplate;
         this.tokenUsageService = tokenUsageService;
+        this.aiQueryService = aiQueryService;
     }
 
     public Question findById(Long id) {
@@ -55,20 +61,58 @@ public class ChatGPTService {
     }
 
     public ChatGPTResponse getQuizResponse(Long id) throws Exception {
+        boolean existFlag = aiQueryService.existsByQuestionIdAndAiModel(id, gptModel);
+        ChatGPTResponse chatGPTResponse = new ChatGPTResponse();
+
         Question question = findById(id);
         log.info("Question: {}", question);
 
-        ArrayList<ChatGPTRequest.Message> messages = makeMessage(question);
+        if(existFlag) {
+            log.info("이미 ai 결과가 존재합니다.");
+            AiQuery aiQuery = aiQueryService.findByQuestionId(id);
 
-        ChatGPTResponse chatGPTResponse = getChatGPTResponse(messages);
+            ChatGPTResponse.Usage usage = new ChatGPTResponse.Usage();
+            usage.setPrompt_tokens(aiQuery.getPromptTokens());
+            usage.setTotal_tokens(aiQuery.getTotalTokens());
+            usage.setCompletion_tokens(aiQuery.getCompletionTokens());
 
-        //오늘 날짜를 YYYY-MM-DD 형식으로 저장
+            chatGPTResponse.setAnswer(aiQuery.getAnswer());
+            chatGPTResponse.setModel(aiQuery.getAiModel());
+            chatGPTResponse.setUsage(usage);
+            return chatGPTResponse;
+        }
+
+        long startTime = System.currentTimeMillis();
+
+        ArrayList<ChatGPTRequest.Message> messages = makeMessage(question); //ai 질문 생성
+        chatGPTResponse = getChatGPTResponse(messages);                     //ai 답변 생성
+
+        long endTime = System.currentTimeMillis();
+
+        StringBuilder aiAnswer = new StringBuilder();
+        for (ChatGPTResponse.Choice c : chatGPTResponse.getChoices()) {
+            aiAnswer.append(c.getMessage().getContent()).append("\n");
+        }
+        chatGPTResponse.setAnswer(aiAnswer.toString()); //브라우저에서 보이는 결과
+
+        //오늘 날짜를 YYYY-MM-DD 형식으로 저장, 날짜별로 AI 쿼리 건수 저장
         String date = java.time.LocalDate.now().toString();
         TokenUsage tokenUsage = new TokenUsage(date,
                 chatGPTResponse.getUsage().getPrompt_tokens(),
                 chatGPTResponse.getUsage().getCompletion_tokens(),
-                chatGPTResponse.getUsage().getTotal_tokens(), 1); //요청 횟수는 +1
+                chatGPTResponse.getUsage().getTotal_tokens(), 1); //요청 횟수 +1
         tokenUsageService.saveOrUpdateTokenUsage(tokenUsage);
+
+        //ai 응답을 저장
+        AiQuery aiQuery = new AiQuery();
+        aiQuery.setQuestionId(id);
+        aiQuery.setAiModel(gptModel);
+        aiQuery.setCompletionTokens(chatGPTResponse.getUsage().getCompletion_tokens());
+        aiQuery.setPromptTokens(chatGPTResponse.getUsage().getPrompt_tokens());
+        aiQuery.setTotalTokens(chatGPTResponse.getUsage().getTotal_tokens());
+        aiQuery.setResponseTime((int)(endTime - startTime));
+        aiQuery.setAnswer(aiAnswer.toString());   //4096byte 넘어갈일이 있을까??
+        aiQueryService.save(aiQuery);
 
         return chatGPTResponse;
     }
@@ -77,7 +121,8 @@ public class ChatGPTService {
         ArrayList<ChatGPTRequest.Message> messages = new ArrayList<>();
         //role: system
         messages.add(new ChatGPTRequest.Message("system",
-                "당신은 나의 " + question.getSubject().getName()+ " 선생님입니다."));
+                "당신은 나의 \"" + question.getQid().getName()
+                        + "\" 자격 시험에서 \"" + question.getSubject().getName()+ "\" 과목 선생님입니다."));
 
         //role: user
         StringBuilder prompt = new StringBuilder()

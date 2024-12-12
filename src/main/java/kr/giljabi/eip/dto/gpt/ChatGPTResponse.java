@@ -14,6 +14,7 @@ public class ChatGPTResponse {
     private String model;
     private List<Choice> choices;
     private Usage usage;
+    private String answer;  //choice에 있는 content 전체 내용
 
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)

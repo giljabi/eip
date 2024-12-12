@@ -44,11 +44,11 @@ function askQuestion(questionId) {
                 $('#gptTokens').html(gptTokens);
 
                 let contentHtml = '';
-                $.each(response.data.choices, function(index, item) {
+/*                $.each(response.data.choices, function(index, item) {
                     contentHtml += item.message.content; //.replace(/\n/g, '<br>') + '<br><br>';
-                });
+                });*/
                 const converter = new showdown.Converter();
-                $('#quizExplanation').html(converter.makeHtml(contentHtml));
+                $('#quizExplanation').html(converter.makeHtml(response.data.answer));
             } else {
                 // 실패 시 기본 메시지
                 $('#quizExplanation').html(`<p>${response.message}</p>`);
