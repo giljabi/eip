@@ -10,6 +10,7 @@ import kr.giljabi.eip.service.UserService;
 import kr.giljabi.eip.util.ResponseGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,9 @@ public class ChatGptController {
     private final JwtProviderService jwtProviderService;
     private final UserService userService;
 
+    @Value("${openai.allUsageFlag}")
+    private boolean allUsageFlag;
+
     public ChatGptController(ChatGPTService chatGPTService,
                              JwtProviderService jwtProviderService,
                              UserService userService) {
@@ -37,13 +41,14 @@ public class ChatGptController {
                                             HttpServletRequest request) {
         String ip = request.getRemoteAddr();
         try {
-            String subEmail = jwtProviderService.getSessionByUserinfo(request);
-            User userEntity = userService.selectOneByUserId(subEmail);
-            if(userEntity == null) {
-                log.info("IP: " + ip + " tried to access admin function.");
-                return ResponseEntity.ok(ResponseGenerator.fail(ResponseCode.UNKNOWN_ERROR, "관리자 기능입니다."));
+            if(!allUsageFlag) {  //AI 응답을 저장해서 보여주면 관리자만 사용하지 않아도 비용을 아낄 수 있어 오픈
+                String subEmail = jwtProviderService.getSessionByUserinfo(request);
+                User userEntity = userService.selectOneByUserId(subEmail);
+                if (userEntity == null) {
+                    log.info("IP: " + ip + " tried to access admin function.");
+                    return ResponseEntity.ok(ResponseGenerator.fail(ResponseCode.UNKNOWN_ERROR, "관리자 기능입니다."));
+                }
             }
-
             Response<ChatGPTResponse> response = ResponseGenerator.success(
                     chatGPTService.getQuizResponse(questionId));
             return ResponseEntity.ok(response);

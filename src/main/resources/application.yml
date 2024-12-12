@@ -34,6 +34,8 @@ openai:
     url: https://api.openai.com/v1/chat/completions
     max: 10000  #일일 사용가능한 토큰수
     model: gpt-4o-mini # 비용순: gpt-4, gpt-4o-mini, gpt-3.5-turbo
+  allUsageFlag: true # true 전체 사용자, false: 관리자만 사용
+
 logging:
   level:
     com.ulisesbocchio.jasyptspringboot.encryptor.DefaultLazyEncryptor: WARN

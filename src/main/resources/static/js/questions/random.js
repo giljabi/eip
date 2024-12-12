@@ -42,11 +42,6 @@ function askQuestion(questionId) {
                                 <td>${response.data.usage.completion_tokens}</td>
                                 <td>${response.data.usage.total_tokens}</td>`;
                 $('#gptTokens').html(gptTokens);
-
-                let contentHtml = '';
-/*                $.each(response.data.choices, function(index, item) {
-                    contentHtml += item.message.content; //.replace(/\n/g, '<br>') + '<br><br>';
-                });*/
                 const converter = new showdown.Converter();
                 $('#quizExplanation').html(converter.makeHtml(response.data.answer));
             } else {
@@ -154,7 +149,7 @@ $(document).ready(function () {
                     window.location.href = '/';
                 } else {
                     applyResults(response);
-                    if ($('#isAdmin').val() == 'true')
+                    if ($('#allUsageFlag').val() == 'true')
                         $('button.btn-success').show(); // GPT 해설보기 버튼
                 }
             }

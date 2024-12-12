@@ -16,6 +16,7 @@ import kr.giljabi.eip.util.CommonUtils;
 import kr.giljabi.eip.util.JwtProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +37,9 @@ public class QuestionController {
     private final ResultsService resultService;
     private final SubjectRepository subjectRepository;
     private final JwtProviderService jwtProviderService;
+
+    @Value("${openai.allUsageFlag}")
+    private boolean allUsageFlag;
 
     public QuestionController(QuestionService questionService,
                               ResultsService resultService,
@@ -90,8 +94,9 @@ public class QuestionController {
                                      Model model) {
         try {
             //관리자만 AI기능을 사용하기 위해 세션정보를 추가
-            String userInfo = jwtProviderService.getSessionByUserinfo(request);
-            model.addAttribute("admin", userInfo);
+            //String userInfo = jwtProviderService.getSessionByUserinfo(request);
+            //model.addAttribute("admin", userInfo);
+            model.addAttribute("allUsageFlag", allUsageFlag);
         } catch (Exception e) {
             //log.error("error: {}", e.getMessage());
         }
