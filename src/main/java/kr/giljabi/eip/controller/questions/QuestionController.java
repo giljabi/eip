@@ -1,33 +1,29 @@
 package kr.giljabi.eip.controller.questions;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.swagger.v3.oas.annotations.Operation;
 import kr.giljabi.eip.dto.request.AnswerDTO;
 import kr.giljabi.eip.dto.request.AnswerRequest;
 import kr.giljabi.eip.dto.response.AnswerCorrectPercentageDto;
 import kr.giljabi.eip.dto.response.AnswerResult;
+import kr.giljabi.eip.dto.response.Response;
+import kr.giljabi.eip.dto.response.ResponseCode;
 import kr.giljabi.eip.model.*;
 import kr.giljabi.eip.repository.SubjectRepository;
 import kr.giljabi.eip.service.JwtProviderService;
 import kr.giljabi.eip.service.QuestionService;
 import kr.giljabi.eip.service.ResultsService;
 import kr.giljabi.eip.util.CommonUtils;
-import kr.giljabi.eip.util.JwtProvider;
+import kr.giljabi.eip.util.ResponseGenerator;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @Controller
@@ -157,6 +153,13 @@ public class QuestionController {
         log.info("UUID: {}", answerRequest.getUuid());
         return ResponseEntity.ok(results);
     }
+
+    @Operation(summary = "현재 장치의 UUID를 조회")
+    @GetMapping("/usersync")
+    public String getUsersync() {
+        return "questions/usersync";
+    }
+
 }
 
 

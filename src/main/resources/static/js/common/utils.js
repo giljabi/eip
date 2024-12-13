@@ -90,6 +90,11 @@ function generateUUID() {
     });
 }
 
+function isValidUUID(uuid) {
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    return uuidRegex.test(uuid);
+}
+
 // UUID 저장
 function getUUID() {
     let uuid = localStorage.getItem(EIPclientUUID); // 기존 UUID 조회
@@ -97,6 +102,10 @@ function getUUID() {
         localStorage.setItem(EIPclientUUID, generateUUID()); // UUID 저장
     }
     return uuid;
+}
+
+function saveUUID(uuid) {
+    localStorage.setItem(EIPclientUUID, uuid); // UUID 저장
 }
 
 
