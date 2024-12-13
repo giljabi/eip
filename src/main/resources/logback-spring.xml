@@ -45,7 +45,7 @@
         <logger name="org.springframework.web" level="OFF"/>
         <logger name="org.springframework.security" level="INFO"/>
         <!-- sql로그: info-->
-        <logger name="p6spy" level="WARN"/>
+        <logger name="p6spy" level="INFO"/>
 
         <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
             <encoder>

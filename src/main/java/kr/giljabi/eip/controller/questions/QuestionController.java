@@ -51,6 +51,8 @@ public class QuestionController {
         this.jwtProviderService = jwtProviderService;
     }
 
+/*
+    //2024.12.13 쿠키를 localStorage로 변경하므로 사용하지 않음
     @Operation(summary = "cookie 생성", description = "발급 후 1년 사용")
     @GetMapping("/generate-uuid")
     public String generateUuid(HttpServletRequest request, HttpServletResponse response) {
@@ -68,18 +70,11 @@ public class QuestionController {
 
         return "redirect:/";
     }
-
+*/
     @Operation(summary = "시험과목 목록", description = "정보처리기사 필기:1")
     @GetMapping("/random/{qid}")
     public ResponseEntity<List<Subject>> getSubject(@PathVariable Integer qid,
-                             HttpServletRequest request,
                              Model model) {
-        //uuid cookie가 없으면 첫화면부터 시작하게 한다.
-        String uuid = CommonUtils.getCookieValue(request, CommonUtils.UUID_COOKIE_NAME);
-        if (uuid == null) {
-            model.addAttribute("results", null);
-            return ResponseEntity.ok(null);
-        }
         List<Subject> subjects = subjectRepository.findByQidOrderById(qid);
         model.addAttribute("results", subjects);
         return ResponseEntity.ok(subjects);
@@ -87,9 +82,10 @@ public class QuestionController {
 
 
     @Operation(summary = "자격증종류, 시험과목에서 랜덤하게 5개 리턴")
-    @GetMapping("/random/{qid}/{subjectId}")
+    @GetMapping("/random/{qid}/{subjectId}/{uuid}")
     public String getRandomQuestions(@PathVariable Integer qid,
                                      @PathVariable Integer subjectId,
+                                     @PathVariable String uuid,
                                      HttpServletRequest request,
                                      Model model) {
         try {
@@ -101,7 +97,6 @@ public class QuestionController {
             //log.error("error: {}", e.getMessage());
         }
 
-        String uuid = CommonUtils.getCookieValue(request, CommonUtils.UUID_COOKIE_NAME);
         if (uuid == null) {
             model.addAttribute("results", null);
             return "redirect:/";
@@ -120,14 +115,12 @@ public class QuestionController {
                                                             Model model) {
         List<AnswerResult> results = new ArrayList<AnswerResult>();
 
-        String uuid = CommonUtils.getCookieValue(request, CommonUtils.UUID_COOKIE_NAME);
-        if (uuid == null) {
+        if (answerRequest.getUuid() == null) {
             model.addAttribute("results", null);
             return ResponseEntity.ok(results);
         }
-        // 사용자가 제출한 답변을 처리하고 정답 여부 판단
-        String clientUUID = CommonUtils.getCookieValue(request, CommonUtils.UUID_COOKIE_NAME);
 
+        // 사용자가 제출한 답변을 처리하고 정답 여부 판단
         for (AnswerDTO answer : answerRequest.getAnswers()) {
             Long questionId = Long.valueOf(answer.getId());
             QName qName = new QName(answer.getQid(), "");
@@ -155,13 +148,13 @@ public class QuestionController {
 
             // 결과 저장
             int correct = isCorrect ? 1 : 0;    // 숫자로 해야 나중에 합산이 편함
-            Results userResult = new Results(clientUUID, questionId, userAnswer,
+            Results userResult = new Results(answerRequest.getUuid(), questionId, userAnswer,
                     correct, CommonUtils.getClientIp(request), qName.getId());
             resultService.save(userResult);
         }
         // 결과를 모델에 추가하여 결과 페이지로 전달
         model.addAttribute("results", results);
-        log.info("UUID: {}", clientUUID);
+        log.info("UUID: {}", answerRequest.getUuid());
         return ResponseEntity.ok(results);
     }
 }

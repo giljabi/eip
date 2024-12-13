@@ -25,12 +25,12 @@ public class ResultsController {
         this.resultService = resultService;
     }
 
-    @Operation(summary = "쿠키에 지정된 결과를 리턴")
-    @GetMapping("/results/{qid}")
+    @Operation(summary = "사용자별로 저장된 결과를 리턴")
+    @GetMapping("/results/{qid}/{uuid}")
     public String getResultByUuid(@PathVariable Integer qid,
+                                  @PathVariable String uuid,
                                   HttpServletRequest request,
                                   Model model) {
-        String uuid = CommonUtils.getCookieValue(request, CommonUtils.UUID_COOKIE_NAME);
         List<UserResultDTO> results = resultService.findByUuid(uuid, qid);
         model.addAttribute("results", results);
         log.info("UUID: {}", uuid);

@@ -13,4 +13,5 @@ public class AnswerRequest {
     private Integer subjectId;
     private ArrayList<AnswerDTO> answers;
     private String qid;
+    private String uuid;
 }

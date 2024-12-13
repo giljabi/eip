@@ -42,7 +42,7 @@ public class CommonUtils {
         return "";
     }
 
-
+/*
     // 쿠키에서 특정 이름의 쿠키 값을 가져오는 메서드
     public static String getCookieValue(HttpServletRequest request, String name) {
         if (request.getCookies() != null) {
@@ -53,7 +53,7 @@ public class CommonUtils {
                     .orElse(null);
         }
         return null;
-    }
+    }*/
 
     public static String getClientIp(HttpServletRequest request) {
         String xfHeader = request.getHeader("X-Forwarded-For");

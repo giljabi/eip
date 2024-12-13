@@ -3,10 +3,11 @@ let qid;
 //현재 콤보에서 선택하므로 qid는 필요없다
 function selectSubject() {
     const subjectSelect = $('#subjectSelect').val();
-    const url = '/questions/random/' + qid + '/' + subjectSelect;
+    const url = `/questions/random/${qid}/${subjectSelect}/${getUUID()}`;
     window.location.href = url;
 }
 
+//정보처리기사코드(qid)의 시험과목 목록을 받아서 select box를 완성
 function makeSubjectList(qid) {
     ajaxRequest({
         url: '/questions/random/' + qid,
@@ -27,6 +28,7 @@ function makeSubjectList(qid) {
     });
 }
 
+//AI 해설을 요청하고 결과를 modal box로 보여줌
 function askQuestion(questionId) {
     $('#quizExplanation').html('<img src="/images/common/ajax-loader.gif" style="width: 200px;" alt="Loading..." />');
     $('#askResultModal').show();
@@ -67,14 +69,15 @@ $(document).ready(function () {
 
     // /questions/random/1/0
     const pathArray = window.location.pathname.split('/');
-    qid = pathArray[pathArray.length - 2];              // 1
+    qid = pathArray[3];              // 1
     makeSubjectList(qid);
     // select 박스의 값 설정
-    const subjectId = pathArray[pathArray.length - 1];  // 0
+    const subjectId = pathArray[4];  // 0
     $('#subjectSelect').val(subjectId);
 
+    //localStorage에 저장된 고유값으로 풀이 결과를 조회
     $('#viewResultsButton').click(function () {
-        const url = '/questions/results/' + qid;
+        const url = `/questions/results/${qid}/${getUUID()}`;
         const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
 
 /*        // 팝업 차단 방지를 위해 창이 제대로 열리지 않은 경우 처리
@@ -83,18 +86,21 @@ $(document).ready(function () {
         }*/
     });
 
+    //문제 풀이 후 계속해서 문제를 요청
     $('#retryButton').click(function () {
         $('#retryOverlay').fadeIn();
 
         setTimeout(function () {
             $('#retryOverlay').fadeOut();
             const subjectSelect = $('#subjectSelect').val();
-            const url = '/questions/random/' + qid + '/' + subjectSelect;
+            const url = `/questions/random/${qid}/${subjectSelect}/${getUUID()}`;
+
             window.location.href = url;
         }, 1000);
 
     });
 
+    //문제에서 정답 선택 후 정답 유무를 요청
     $('#submitButton').click(function () {
         $('#adOverlay').fadeIn();
 
@@ -139,6 +145,7 @@ $(document).ready(function () {
         let reqData = {};
         reqData.subject = subjectSelect;
         reqData.answers = userAnswer;
+        reqData.uuid = getUUID();   //사용자 식별정보
         //console.log(reqData); // 결과를 콘솔에 출력 (테스트용)
 
         ajaxRequest({
@@ -159,6 +166,7 @@ $(document).ready(function () {
         });
     }
 
+    //문제에서 선택한 답과 정답을 비교하여 오답을 확인
     function applyResults(results) {
         results.forEach(result => {
             const rowId = `#choice-${result.questionId}-${result.correctAnswer}`;
