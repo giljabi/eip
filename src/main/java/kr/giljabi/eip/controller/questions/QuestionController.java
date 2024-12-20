@@ -3,17 +3,15 @@ package kr.giljabi.eip.controller.questions;
 import io.swagger.v3.oas.annotations.Operation;
 import kr.giljabi.eip.dto.request.AnswerDTO;
 import kr.giljabi.eip.dto.request.AnswerRequest;
+import kr.giljabi.eip.dto.request.SubjectQuestionDTO;
 import kr.giljabi.eip.dto.response.AnswerCorrectPercentageDto;
 import kr.giljabi.eip.dto.response.AnswerResult;
-import kr.giljabi.eip.dto.response.Response;
-import kr.giljabi.eip.dto.response.ResponseCode;
 import kr.giljabi.eip.model.*;
-import kr.giljabi.eip.repository.SubjectRepository;
 import kr.giljabi.eip.service.JwtProviderService;
 import kr.giljabi.eip.service.QuestionService;
 import kr.giljabi.eip.service.ResultsService;
+import kr.giljabi.eip.service.SubjectService;
 import kr.giljabi.eip.util.CommonUtils;
-import kr.giljabi.eip.util.ResponseGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +29,7 @@ import java.util.List;
 public class QuestionController {
     private final QuestionService questionService;
     private final ResultsService resultService;
-    private final SubjectRepository subjectRepository;
+    private final SubjectService subjectService;
     private final JwtProviderService jwtProviderService;
 
     @Value("${openai.allUsageFlag}")
@@ -39,39 +37,19 @@ public class QuestionController {
 
     public QuestionController(QuestionService questionService,
                               ResultsService resultService,
-                              SubjectRepository subjectRepository,
+                              SubjectService subjectService,
                               JwtProviderService jwtProviderService) {
         this.questionService = questionService;
         this.resultService = resultService;
-        this.subjectRepository = subjectRepository;
+        this.subjectService = subjectService;
         this.jwtProviderService = jwtProviderService;
     }
 
-/*
-    //2024.12.13 쿠키를 localStorage로 변경하므로 사용하지 않음
-    @Operation(summary = "cookie 생성", description = "발급 후 1년 사용")
-    @GetMapping("/generate-uuid")
-    public String generateUuid(HttpServletRequest request, HttpServletResponse response) {
-        String uuid = CommonUtils.getCookieValue(request, CommonUtils.UUID_COOKIE_NAME);        // UUID 생성
-        if (uuid == null) {
-            uuid = UUID.randomUUID().toString();
-
-            // 쿠키 생성 및 설정
-            Cookie uuidCookie = new Cookie(CommonUtils.UUID_COOKIE_NAME, uuid);
-            uuidCookie.setHttpOnly(true); // JavaScript에서 접근 불가 (보안 강화)
-            uuidCookie.setPath("/");
-            uuidCookie.setMaxAge(356 * 24 * 60 * 60); // 쿠키 만료 시간: 365일
-            response.addCookie(uuidCookie);
-        }
-
-        return "redirect:/";
-    }
-*/
     @Operation(summary = "시험과목 목록", description = "정보처리기사 필기:1")
     @GetMapping("/random/{qid}")
-    public ResponseEntity<List<Subject>> getSubject(@PathVariable Integer qid,
+    public ResponseEntity<List<SubjectQuestionDTO>> getSubject(@PathVariable Integer qid,
                              Model model) {
-        List<Subject> subjects = subjectRepository.findByQidOrderById(qid);
+        List<SubjectQuestionDTO> subjects = subjectService.getSubjectQuestions(qid);
         model.addAttribute("results", subjects);
         return ResponseEntity.ok(subjects);
     }

@@ -20,7 +20,8 @@ function makeSubjectList(qid) {
                 window.location.href = '/';
             } else {
                 $.each(response, function(index, item) {
-                    $('#subjectSelect').append(new Option(item.name, item.id));
+                    let itemName = `${item.name} (${item.cnt} 문제)`;
+                    $('#subjectSelect').append(new Option(itemName, item.id));
                 });
             }
             //console.log(response);
