@@ -19,8 +19,7 @@
             <button type="button"
                     th:value="${quiz.id}"
                     class="startButton btn btn-primary mb-3 w-100"
-                    th:text="${quiz.name} + ' (' + ${quiz.cnt} + ' 문제)'"
-                    onclick="handleButtonClick(this)">
+		    th:text="${quiz.name} + ' (' + ${quiz.cnt} + ' 문제)'">
             </button>
         </div>
         <button type="button" value="1" class="btn btn-primary mt-3 w-100" onclick="location.href='/questions/usersync'">학습정보 동기화</button>
