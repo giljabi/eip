@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,12 +14,17 @@
 
 <div class="container">
     <h1>My Quizzz</h1>
-    <button type="submit" value="1" class="startButton btn btn-primary mt-3 w-100">정보처리기사 필기 기출문제</button>
-    <!--
-    <button type="submit" value="2" class="startButton btn btn-primary mt-3 w-100">전기기사 필기 기출문제</button>
-    -->
-
-    <button type="button" value="1" class="btn btn-primary mt-3 w-100" onclick="location.href='/questions/usersync'">학습정보 동기화</button>
+    <div class="mt-3">
+        <div th:each="quiz : ${quizzes}">
+            <button type="button"
+                    th:value="${quiz.id}"
+                    class="startButton btn btn-primary mb-3 w-100"
+                    th:text="${quiz.name} + ' (' + ${quiz.cnt} + ' 문제)'"
+                    onclick="handleButtonClick(this)">
+            </button>
+        </div>
+        <button type="button" value="1" class="btn btn-primary mt-3 w-100" onclick="location.href='/questions/usersync'">학습정보 동기화</button>
+    </div>
 </div>
 </body>
 </html>

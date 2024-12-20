@@ -24,11 +24,11 @@ public class UserController {
     public String userLogin(){
         return login();
     }
-
+/*
     @RequestMapping("/")
     public String index(){
         return "index";
-    }
+    }*/
 
 }
 

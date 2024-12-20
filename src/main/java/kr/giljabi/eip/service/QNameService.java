@@ -1,5 +1,6 @@
 package kr.giljabi.eip.service;
 
+import kr.giljabi.eip.dto.request.SubjectQuestionDTO;
 import kr.giljabi.eip.model.QName;
 import kr.giljabi.eip.repository.QNameRepository;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,10 @@ public class QNameService {
 
     public QName findById(Integer id) {
         return qNameRepository.findById(id).orElse(null);
+    }
+
+    public List<SubjectQuestionDTO> findByQnameCount() {
+        return qNameRepository.findByQnameCount();
     }
 }
 

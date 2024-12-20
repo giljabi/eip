@@ -16,6 +16,8 @@ CREATE TABLE qname (
                        id serial4 PRIMARY KEY,
                        "name" varchar(128) NULL
 );
+-- 사용유무
+alter table qname add column useflag bool default false;
 
 
 -- 시행년도
