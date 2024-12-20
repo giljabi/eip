@@ -11,15 +11,12 @@
 
 ![img.png](docs/selectbox_question_count.png)
 
-
-
 ## 2024.12.12
 * 모든 사용자 AI해설 기능 사용가능하게 변경하고 서버에 적용, **정보처리기사에서 요구하는 답과 다른 경우가 있음**
 
 ![img.png](docs/ai-button.png)
 
 ![img_1.png](docs/ai-response.png)
-
 
 ## 2024.11.28
 ![img.png](docs/random-quiz.png)
